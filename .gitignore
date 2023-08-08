@@ -1,0 +1,27 @@
+# Repos installed
+CMSSW_11_3_4
+DifferentialCombinationPostProcess
+DifferentialCombinationRun2
+.built.txt
+install_dir
+outputs
+
+# Python
+*.py[cod]
+__pycache__/
+venv/
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.mypy_cache/
+
+# Editors
+*.sublime-workspace
+*.sublime-project
+.vscode/
+*.code-workspace
+.idea/
+
+# Misc
+.DS_Store

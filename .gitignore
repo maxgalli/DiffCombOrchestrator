@@ -2,6 +2,8 @@
 CMSSW_11_3_4
 DifferentialCombinationPostProcess
 DifferentialCombinationRun2
+EFTModelsStudies
+EFTScalingEquations
 .built.txt
 install_dir
 outputs
@@ -15,6 +17,7 @@ htmlcov/
 .coverage
 .coverage.*
 .mypy_cache/
+*egg-info/
 
 # Editors
 *.sublime-workspace

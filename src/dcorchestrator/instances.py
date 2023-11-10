@@ -18,7 +18,7 @@ SM
 """
 
 create_sm_workspace_pt_Hgg = CreateSMWorkspace(
-    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt".format(
+    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt".format(
         root_dir
     ),
     observable="smH_PTH",
@@ -145,7 +145,7 @@ submit_sm_scans_pt_HggHZZ = SubmitSMScans(
 
 combine_cards_sm_pt_HggHZZHWWHttHbbVBFHttBoost = CombineCards(
     channels=[
-        "hgg=DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
+        "hgg=DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
         "hzz=DifferentialCombinationRun2/Analyses/hig-21-009/pT4l/hzz4l_all_13TeV_xs_pT4l_bin_v3.txt",
         "hww=DifferentialCombinationRun2/Analyses/hig-19-002/ptH_for_differential_combination/fullmodel_unreg.txt",
         "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg.txt",
@@ -270,6 +270,18 @@ submit_sm_scans_Njets_HggHZZHWWHtt_statonly = SubmitSMScans(
     global_fit_file="higgsCombine_POSTFIT_HggHZZHWWHtt.MultiDimFit.mH125.38.root",
 )
 
+submit_sm_scans_Njets_HggHZZHWWHtt_asimov = SubmitSMScans(
+    category="HggHZZHWWHtt_asimov",
+    create_sm_workspace=create_sm_workspace_Njets_HggHZZHWWHtt,
+)
+
+submit_sm_scans_Njets_HggHZZHWWHtt_asimov_statonly = SubmitSMScans(
+    category="HggHZZHWWHtt_asimov_statonly",
+    create_sm_workspace=create_sm_workspace_Njets_HggHZZHWWHtt,
+    full_stat_task=submit_sm_scans_Njets_HggHZZHWWHtt_asimov,
+    global_fit_file="higgsCombineAsimovPostFit.GenerateOnly.mH125.38.123456.root",
+)
+
 create_sm_workspace_yH_Hgg = CreateSMWorkspace(
     datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_AbsRapidityFine/Datacard_13TeV_differential_AbsRapidityFine.txt".format(root_dir),
     observable="yH",
@@ -281,6 +293,11 @@ submit_sm_scans_yH_Hgg = SubmitSMScans(
     create_sm_workspace=create_sm_workspace_yH_Hgg,
 )
 
+submit_sm_scans_yH_Hgg_asimov = SubmitSMScans(
+    category="Hgg_asimov",
+    create_sm_workspace=create_sm_workspace_yH_Hgg,
+)
+
 create_sm_workspace_yH_HZZ = CreateSMWorkspace(
     datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-21-009/rapidity4l/hzz4l_all_13TeV_xs_rapidity4l_bin_v3.txt".format(root_dir),
     observable="yH",
@@ -289,6 +306,12 @@ create_sm_workspace_yH_HZZ = CreateSMWorkspace(
 
 submit_sm_scans_yH_HZZ = SubmitSMScans(
     category="HZZ",
+    has_jobs=False,
+    create_sm_workspace=create_sm_workspace_yH_HZZ,
+)
+
+submit_sm_scans_yH_HZZ_asimov = SubmitSMScans(
+    category="HZZ_asimov",
     has_jobs=False,
     create_sm_workspace=create_sm_workspace_yH_HZZ,
 )
@@ -318,6 +341,18 @@ submit_sm_scans_yH_HggHZZ_statonly = SubmitSMScans(
     create_sm_workspace=create_sm_workspace_yH_HggHZZ,
     full_stat_task=submit_sm_scans_yH_HggHZZ,
     global_fit_file="higgsCombine_POSTFIT_HggHZZ.MultiDimFit.mH125.38.root",
+)
+
+submit_sm_scans_yH_HggHZZ_asimov = SubmitSMScans(
+    category="HggHZZ_asimov",
+    create_sm_workspace=create_sm_workspace_yH_HggHZZ,
+)
+
+submit_sm_scans_yH_HggHZZ_asimov_statonly = SubmitSMScans(
+    category="HggHZZ_asimov_statonly",
+    create_sm_workspace=create_sm_workspace_yH_HggHZZ,
+    full_stat_task=submit_sm_scans_yH_HggHZZ_asimov,
+    global_fit_file="higgsCombineAsimovPostFit.GenerateOnly.mH125.38.123456.root",
 )
 
 create_sm_workspace_ptj_Hgg = CreateSMWorkspace(
@@ -363,11 +398,13 @@ create_sm_workspace_ptj_HttBoost = CreateSMWorkspace(
 submit_sm_scans_ptj_HttBoost = SubmitSMScans(
     category="HttBoost",
     create_sm_workspace=create_sm_workspace_ptj_HttBoost,
+    has_jobs=False,
 )
 
 submit_sm_scans_ptj_HttBoost_asimov = SubmitSMScans(
     category="HttBoost_asimov",
     create_sm_workspace=create_sm_workspace_ptj_HttBoost,
+    has_jobs=False,
 )
 
 combine_cards_sm_ptj_HggHZZHttBoost = CombineCards(
@@ -377,6 +414,7 @@ combine_cards_sm_ptj_HggHZZHttBoost = CombineCards(
         "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_LeadJetPt_NoOverLap/V1_diff_jpt_dr0p5/hig-21-017_jpt.txt",
     ],
     output_card_name="{}/CombinedCards/smH_PTJ0/HggHZZHttBoost.txt".format(root_dir),
+    replace_mass=True
 )
 
 create_sm_workspace_ptj_HggHZZHttBoost = CreateSMWorkspace(
@@ -414,6 +452,11 @@ submit_sm_scans_mjj_Hgg = SubmitSMScans(
     create_sm_workspace=create_sm_workspace_mjj_Hgg,
 )
 
+submit_sm_scans_mjj_Hgg_asimov = SubmitSMScans(
+    category="Hgg_asimov",
+    create_sm_workspace=create_sm_workspace_mjj_Hgg,
+)
+
 create_sm_workspace_mjj_HZZ = CreateSMWorkspace(
     datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-21-009/mjj/hzz4l_all_13TeV_xs_mjj_bin_v3.txt".format(root_dir),
     observable="mjj",
@@ -422,6 +465,12 @@ create_sm_workspace_mjj_HZZ = CreateSMWorkspace(
 
 submit_sm_scans_mjj_HZZ = SubmitSMScans(
     category="HZZ",
+    has_jobs=False,
+    create_sm_workspace=create_sm_workspace_mjj_HZZ,
+)
+
+submit_sm_scans_mjj_HZZ_asimov = SubmitSMScans(
+    category="HZZ_asimov",
     has_jobs=False,
     create_sm_workspace=create_sm_workspace_mjj_HZZ,
 )
@@ -453,6 +502,18 @@ submit_sm_scans_mjj_HggHZZ_statonly = SubmitSMScans(
     global_fit_file="higgsCombine_POSTFIT_HggHZZ.MultiDimFit.mH125.38.root",
 )
 
+submit_sm_scans_mjj_HggHZZ_asimov = SubmitSMScans(
+    category="HggHZZ_asimov",
+    create_sm_workspace=create_sm_workspace_mjj_HggHZZ,
+)
+
+submit_sm_scans_mjj_HggHZZ_asimov_statonly = SubmitSMScans(
+    category="HggHZZ_asimov_statonly",
+    create_sm_workspace=create_sm_workspace_mjj_HggHZZ,
+    full_stat_task=submit_sm_scans_mjj_HggHZZ_asimov,
+    global_fit_file="higgsCombineAsimovPostFit.GenerateOnly.mH125.38.123456.root"
+)
+
 create_sm_workspace_detajj_Hgg = CreateSMWorkspace(
     datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_AbsDeltaEtaJ1J2Jets4p7/Datacard_13TeV_differential_AbsDeltaEtaJ1J2Jets4p7.txt".format(root_dir),
     observable="DEtajj",
@@ -464,6 +525,11 @@ submit_sm_scans_detajj_Hgg = SubmitSMScans(
     create_sm_workspace=create_sm_workspace_detajj_Hgg,
 )
 
+submit_sm_scans_detajj_Hgg_asimov = SubmitSMScans(
+    category="Hgg_asimov",
+    create_sm_workspace=create_sm_workspace_detajj_Hgg,
+)
+
 create_sm_workspace_detajj_HZZ = CreateSMWorkspace(
     datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-21-009/absdetajj/hzz4l_all_13TeV_xs_absdetajj_bin_v3.txt".format(root_dir),
     observable="DEtajj",
@@ -472,6 +538,12 @@ create_sm_workspace_detajj_HZZ = CreateSMWorkspace(
 
 submit_sm_scans_detajj_HZZ = SubmitSMScans(
     category="HZZ",
+    has_jobs=False,
+    create_sm_workspace=create_sm_workspace_detajj_HZZ,
+)
+
+submit_sm_scans_detajj_HZZ_asimov = SubmitSMScans(
+    category="HZZ_asimov",
     has_jobs=False,
     create_sm_workspace=create_sm_workspace_detajj_HZZ,
 )
@@ -503,6 +575,18 @@ submit_sm_scans_detajj_HggHZZ_statonly = SubmitSMScans(
     global_fit_file="higgsCombine_POSTFIT_HggHZZ.MultiDimFit.mH125.38.root",
 )
 
+submit_sm_scans_detajj_HggHZZ_asimov = SubmitSMScans(
+    category="HggHZZ_asimov",
+    create_sm_workspace=create_sm_workspace_detajj_HggHZZ,
+)
+
+submit_sm_scans_detajj_HggHZZ_asimov_statonly = SubmitSMScans(
+    category="HggHZZ_asimov_statonly",
+    create_sm_workspace=create_sm_workspace_detajj_HggHZZ,
+    full_stat_task=submit_sm_scans_detajj_HggHZZ_asimov,
+    global_fit_file="higgsCombineAsimovPostFit.GenerateOnly.mH125.38.123456.root"
+)
+
 create_sm_workspace_taucj_Hgg = CreateSMWorkspace(
     datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_TauCJets4p7/Datacard_13TeV_differential_TauCJets4p7.txt".format(root_dir),
     observable="TauCJ",
@@ -514,6 +598,11 @@ submit_sm_scans_taucj_Hgg = SubmitSMScans(
     create_sm_workspace=create_sm_workspace_taucj_Hgg,
 )
 
+submit_sm_scans_taucj_Hgg_asimov = SubmitSMScans(
+    category="Hgg_asimov",
+    create_sm_workspace=create_sm_workspace_taucj_Hgg,
+)
+
 create_sm_workspace_taucj_HZZ = CreateSMWorkspace(
     datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-21-009/TCjmax/hzz4l_all_13TeV_xs_TCjmax_bin_v3.txt".format(root_dir),
     observable="TauCJ",
@@ -522,6 +611,12 @@ create_sm_workspace_taucj_HZZ = CreateSMWorkspace(
 
 submit_sm_scans_taucj_HZZ = SubmitSMScans(
     category="HZZ",
+    has_jobs=False,
+    create_sm_workspace=create_sm_workspace_taucj_HZZ,
+)
+
+submit_sm_scans_taucj_HZZ_asimov = SubmitSMScans(
+    category="HZZ_asimov",
     has_jobs=False,
     create_sm_workspace=create_sm_workspace_taucj_HZZ,
 )
@@ -553,6 +648,18 @@ submit_sm_scans_taucj_HggHZZ_statonly = SubmitSMScans(
     global_fit_file="higgsCombine_POSTFIT_HggHZZ.MultiDimFit.mH125.38.root",
 )
 
+submit_sm_scans_taucj_HggHZZ_asimov = SubmitSMScans(
+    category="HggHZZ_asimov",
+    create_sm_workspace=create_sm_workspace_taucj_HggHZZ,
+)
+
+submit_sm_scans_taucj_HggHZZ_asimov_statonly = SubmitSMScans(
+    category="HggHZZ_asimov_statonly",
+    create_sm_workspace=create_sm_workspace_taucj_HggHZZ,
+    full_stat_task=submit_sm_scans_taucj_HggHZZ_asimov,
+    global_fit_file="higgsCombineAsimovPostFit.GenerateOnly.mH125.38.123456.root"
+)
+
 submit_instances = {
     "SM_pt_Hgg": submit_sm_scans_pt_Hgg,
     "SM_pt_Hgg_asimov": submit_sm_scans_pt_Hgg_asimov,
@@ -579,10 +686,16 @@ submit_instances = {
     "SM_Njets_Htt_asimov": submit_sm_scans_Njets_Htt_asimov,
     "SM_Njets_HggHZZHWWHtt": submit_sm_scans_Njets_HggHZZHWWHtt,
     "SM_Njets_HggHZZHWWHtt_statonly": submit_sm_scans_Njets_HggHZZHWWHtt_statonly,
+    "SM_Njets_HggHZZHWWHtt_asimov": submit_sm_scans_Njets_HggHZZHWWHtt_asimov,
+    "SM_Njets_HggHZZHWWHtt_asimov_statonly": submit_sm_scans_Njets_HggHZZHWWHtt_asimov_statonly,
     "SM_yH_Hgg": submit_sm_scans_yH_Hgg,
+    "SM_yH_Hgg_asimov": submit_sm_scans_yH_Hgg_asimov,
     "SM_yH_HZZ": submit_sm_scans_yH_HZZ,
+    "SM_yH_HZZ_asimov": submit_sm_scans_yH_HZZ_asimov,
     "SM_yH_HggHZZ": submit_sm_scans_yH_HggHZZ,
     "SM_yH_HggHZZ_statonly": submit_sm_scans_yH_HggHZZ_statonly,
+    "SM_yH_HggHZZ_asimov": submit_sm_scans_yH_HggHZZ_asimov,
+    "SM_yH_HggHZZ_asimov_statonly": submit_sm_scans_yH_HggHZZ_asimov_statonly,
     "SM_ptj_Hgg": submit_sm_scans_ptj_Hgg,
     "SM_ptj_Hgg_asimov": submit_sm_scans_ptj_Hgg_asimov,
     "SM_ptj_HZZ": submit_sm_scans_ptj_HZZ,
@@ -593,17 +706,29 @@ submit_instances = {
     "SM_ptj_HggHZZHttBoost_asimov": submit_sm_scans_ptj_HggHZZHttBoost_asimov,
     "SM_ptj_HggHZZHttBoost_asimov_statonly": submit_sm_scans_ptj_HggHZZHttBoost_asimov_statonly,
     "SM_mjj_Hgg": submit_sm_scans_mjj_Hgg,
+    "SM_mjj_Hgg_asimov": submit_sm_scans_mjj_Hgg_asimov,
     "SM_mjj_HZZ": submit_sm_scans_mjj_HZZ,
+    "SM_mjj_HZZ_asimov": submit_sm_scans_mjj_HZZ_asimov,
     "SM_mjj_HggHZZ": submit_sm_scans_mjj_HggHZZ,
     "SM_mjj_HggHZZ_statonly": submit_sm_scans_mjj_HggHZZ_statonly,
+    "SM_mjj_HggHZZ_asimov": submit_sm_scans_mjj_HggHZZ_asimov,
+    "SM_mjj_HggHZZ_asimov_statonly": submit_sm_scans_mjj_HggHZZ_asimov_statonly,
     "SM_detajj_Hgg": submit_sm_scans_detajj_Hgg,
+    "SM_detajj_Hgg_asimov": submit_sm_scans_detajj_Hgg_asimov,
     "SM_detajj_HZZ": submit_sm_scans_detajj_HZZ,
+    "SM_detajj_HZZ_asimov": submit_sm_scans_detajj_HZZ_asimov,
     "SM_detajj_HggHZZ": submit_sm_scans_detajj_HggHZZ,
     "SM_detajj_HggHZZ_statonly": submit_sm_scans_detajj_HggHZZ_statonly,
+    "SM_detajj_HggHZZ_asimov": submit_sm_scans_detajj_HggHZZ_asimov,
+    "SM_detajj_HggHZZ_asimov_statonly": submit_sm_scans_detajj_HggHZZ_asimov_statonly,
     "SM_taucj_Hgg": submit_sm_scans_taucj_Hgg,
+    "SM_taucj_Hgg_asimov": submit_sm_scans_taucj_Hgg_asimov,
     "SM_taucj_HZZ": submit_sm_scans_taucj_HZZ,
+    "SM_taucj_HZZ_asimov": submit_sm_scans_taucj_HZZ_asimov,
     "SM_taucj_HggHZZ": submit_sm_scans_taucj_HggHZZ,
     "SM_taucj_HggHZZ_statonly": submit_sm_scans_taucj_HggHZZ_statonly,
+    "SM_taucj_HggHZZ_asimov": submit_sm_scans_taucj_HggHZZ_asimov,
+    "SM_taucj_HggHZZ_asimov_statonly": submit_sm_scans_taucj_HggHZZ_asimov_statonly,
 }
 
 """Note:
@@ -692,6 +817,15 @@ plot_sm_cross_section_pt_HggHZZ = PlotSMCrossSection(
     submit_sm_scans=["SM_pt_HggHZZ", "SM_pt_Hgg", "SM_pt_HZZ"],
 )
 
+plot_sm_cross_section_pt_HggHZZHWWHttHbbVBFHttBoost_asimov_alone = PlotSMCrossSection(
+    categories=["HggHZZHWWHttHbbVBFHttBoost"],
+    systematic_bands="HggHZZHWWHttHbbVBFHttBoost",
+    submit_sm_scans=[
+        "SM_pt_HggHZZHWWHttHbbVBFHttBoost_asimov",
+        "SM_pt_HggHZZHWWHttHbbVBFHttBoost_asimov_statonly",
+    ],
+)
+
 plot_sm_cross_section_pt_HggHZZHWWHttHbbVBFHttBoost_asimov = PlotSMCrossSection(
     categories=["HggHZZHWWHttHbbVBFHttBoost", "Hgg", "HZZ", "HWW"],
     singles=["Htt", "HbbVBF", "HttBoost"],
@@ -737,10 +871,47 @@ plot_sm_cross_section_Njets_HggHZZHWWHtt = PlotSMCrossSection(
     submit_sm_scans=["SM_Njets_HggHZZHWWHtt", "SM_Njets_HggHZZHWWHtt_statonly", "SM_Njets_Hgg", "SM_Njets_HZZ", "SM_Njets_HWW", "SM_Njets_Htt"],
 )
 
+plot_sm_cross_section_Njets_HggHZZHWWHtt_asimov = PlotSMCrossSection(
+    categories=["HggHZZHWWHtt", "Hgg", "HZZ", "HWW"],
+    singles=["Htt"],
+    systematic_bands="HggHZZHWWHtt",
+    allow_extrapolation=True,
+    submit_sm_scans=[
+        "SM_Njets_HggHZZHWWHtt_asimov",
+        "SM_Njets_HggHZZHWWHtt_asimov_statonly",
+        "SM_Njets_Hgg_asimov",
+        "SM_Njets_HZZ_asimov",
+        "SM_Njets_HWW_asimov",
+        "SM_Njets_Htt_asimov",
+    ],
+)
+
+plot_sm_cross_section_Njets_HggHZZHWWHtt_asimov_alone = PlotSMCrossSection(
+    categories=["HggHZZHWWHtt"],
+    systematic_bands="HggHZZHWWHtt",
+    allow_extrapolation=True,
+    submit_sm_scans=[
+        "SM_Njets_HggHZZHWWHtt_asimov",
+        "SM_Njets_HggHZZHWWHtt_asimov_statonly",
+    ],
+)
+
 plot_sm_cross_section_yH_HggHZZ = PlotSMCrossSection(
     categories=["HggHZZ", "Hgg", "HZZ"],
     systematic_bands="HggHZZ",
     submit_sm_scans=["SM_yH_HggHZZ", "SM_yH_HggHZZ_statonly", "SM_yH_Hgg", "SM_yH_HZZ"],
+)
+
+plot_sm_cross_section_yH_HggHZZ_asimov = PlotSMCrossSection(
+    categories=["HggHZZ", "Hgg", "HZZ"],
+    systematic_bands="HggHZZ",
+    submit_sm_scans=["SM_yH_HggHZZ_asimov", "SM_yH_HggHZZ_asimov_statonly", "SM_yH_Hgg_asimov", "SM_yH_HZZ_asimov"],
+)
+
+plot_sm_cross_section_yH_HggHZZ_asimov_alone = PlotSMCrossSection(
+    categories=["HggHZZ"],
+    systematic_bands="HggHZZ",
+    submit_sm_scans=["SM_yH_HggHZZ_asimov", "SM_yH_HggHZZ_asimov_statonly"],
 )
 
 plot_sm_cross_section_ptj_HggHZZHttBoost_asimov = PlotSMCrossSection(
@@ -756,10 +927,31 @@ plot_sm_cross_section_ptj_HggHZZHttBoost_asimov = PlotSMCrossSection(
     ],
 )
 
+plot_sm_cross_section_ptj_HggHZZHttBoost_asimov_alone = PlotSMCrossSection(
+    categories=["HggHZZHttBoost"],
+    systematic_bands="HggHZZHttBoost",
+    submit_sm_scans=[
+        "SM_ptj_HggHZZHttBoost_asimov",
+        "SM_ptj_HggHZZHttBoost_asimov_statonly",
+    ],
+)
+
 plot_sm_cross_section_mjj_HggHZZ = PlotSMCrossSection(
     categories=["HggHZZ", "Hgg", "HZZ"],
     systematic_bands="HggHZZ",
     submit_sm_scans=["SM_mjj_HggHZZ", "SM_mjj_HggHZZ_statonly", "SM_mjj_Hgg", "SM_mjj_HZZ"],
+)
+
+plot_sm_cross_section_mjj_HggHZZ_asimov = PlotSMCrossSection(
+    categories=["HggHZZ", "Hgg", "HZZ"],
+    systematic_bands="HggHZZ",
+    submit_sm_scans=["SM_mjj_HggHZZ_asimov", "SM_mjj_HggHZZ_asimov_statonly", "SM_mjj_Hgg_asimov", "SM_mjj_HZZ_asimov"],
+)
+
+plot_sm_cross_section_mjj_HggHZZ_asimov_alone = PlotSMCrossSection(
+    categories=["HggHZZ"],
+    systematic_bands="HggHZZ",
+    submit_sm_scans=["SM_mjj_HggHZZ_asimov", "SM_mjj_HggHZZ_asimov_statonly"],
 )
 
 plot_sm_cross_section_detajj_HggHZZ = PlotSMCrossSection(
@@ -768,10 +960,34 @@ plot_sm_cross_section_detajj_HggHZZ = PlotSMCrossSection(
     submit_sm_scans=["SM_detajj_HggHZZ", "SM_detajj_HggHZZ_statonly", "SM_detajj_Hgg", "SM_detajj_HZZ"],
 )
 
+plot_sm_cross_section_detajj_HggHZZ_asimov = PlotSMCrossSection(
+    categories=["HggHZZ", "Hgg", "HZZ"],
+    systematic_bands="HggHZZ",
+    submit_sm_scans=["SM_detajj_HggHZZ_asimov", "SM_detajj_HggHZZ_asimov_statonly", "SM_detajj_Hgg_asimov", "SM_detajj_HZZ_asimov"],
+)
+
+plot_sm_cross_section_detajj_HggHZZ_asimov_alone = PlotSMCrossSection(
+    categories=["HggHZZ"],
+    systematic_bands="HggHZZ",
+    submit_sm_scans=["SM_detajj_HggHZZ_asimov", "SM_detajj_HggHZZ_asimov_statonly"],
+)
+
 plot_sm_cross_section_taucj_HggHZZ = PlotSMCrossSection(
     categories=["HggHZZ", "Hgg", "HZZ"],
     systematic_bands="HggHZZ",
     submit_sm_scans=["SM_taucj_HggHZZ", "SM_taucj_HggHZZ_statonly", "SM_taucj_Hgg", "SM_taucj_HZZ"],
+)
+
+plot_sm_cross_section_taucj_HggHZZ_asimov = PlotSMCrossSection(
+    categories=["HggHZZ", "Hgg", "HZZ"],
+    systematic_bands="HggHZZ",
+    submit_sm_scans=["SM_taucj_HggHZZ_asimov", "SM_taucj_HggHZZ_asimov_statonly", "SM_taucj_Hgg_asimov", "SM_taucj_HZZ_asimov"],
+)
+
+plot_sm_cross_section_taucj_HggHZZ_asimov_alone = PlotSMCrossSection(
+    categories=["HggHZZ"],
+    systematic_bands="HggHZZ",
+    submit_sm_scans=["SM_taucj_HggHZZ_asimov", "SM_taucj_HggHZZ_asimov_statonly"],
 )
 
 """
@@ -1016,12 +1232,25 @@ submit_smeft_scans_DeltaPhiJJ_LO_Chg_HggHZZ = SubmitSMEFTScans(
     create_smeft_workspace=create_smeft_workspace_DeltaPhiJJ_LO_HggHZZ,
 )
 
+combine_cards_smeft_pt_HggHZZHWWHttHbbVBFHttBoost = CombineCards(
+    channels=[
+        "hgg=DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
+        "hzz=DifferentialCombinationRun2/Analyses/hig-21-009/pT4l/hzz4l_all_13TeV_xs_pT4l_bin_v3.txt",
+        "hww=DifferentialCombinationRun2/Analyses/hig-19-002/ptH_for_differential_combination/fullmodel_unreg.txt",
+        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg.txt",
+        "hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/testModel/model_combined_withpaths.txt",
+        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap/V2_Diff_dr0p5_hpt_2bin/hig-21-017_hpt.txt"
+    ],
+    output_card_name="CombinedCards/smH_PTH/HggHZZHWWHttHbbVBFHttBoost_smeft.txt",
+    replace_mass=True
+)
+
 create_smeft_workspace_pt_NLO_FullComb = CreateSMEFTWorkspace(
-    datacard="{}/CombinedCards/smH_PTH/HggHZZHWWHttHbbVBFHttBoost.txt".format(root_dir),
+    datacard="{}/CombinedCards/smH_PTH/HggHZZHWWHttHbbVBFHttBoost_smeft.txt".format(root_dir),
     model="220926Atlas",
     equations="CMS-ForDiff-230530-FullDecay",
     chan_obs="PtFullComb",
-    combine_cards=combine_cards_sm_pt_HggHZZHWWHttHbbVBFHttBoost,
+    combine_cards=combine_cards_smeft_pt_HggHZZHWWHttHbbVBFHttBoost,
 )
 
 submit_smeft_scans_pt_FullComb_NLO_Chb_asimov = SubmitSMEFTScans(
@@ -1061,11 +1290,11 @@ submit_smeft_scans_pt_FullComb_NLO_Chwb = SubmitSMEFTScans(
 )
 
 create_smeft_workspace_pt_LO_FullComb = CreateSMEFTWorkspace(
-    datacard="{}/CombinedCards/smH_PTH/HggHZZHWWHttHbbVBFHttBoost.txt".format(root_dir),
+    datacard="{}/CombinedCards/smH_PTH/HggHZZHWWHttHbbVBFHttBoost_smeft.txt".format(root_dir),
     model="220926Atlas",
     equations="CMS-ForDiffAllSMEFTsim-230530-FullDecay",
     chan_obs="PtFullComb",
-    combine_cards=combine_cards_sm_pt_HggHZZHWWHttHbbVBFHttBoost,
+    combine_cards=combine_cards_smeft_pt_HggHZZHWWHttHbbVBFHttBoost,
 )
 
 submit_smeft_scans_pt_FullComb_LO_Chg_asimov = SubmitSMEFTScans(
@@ -1081,18 +1310,25 @@ submit_smeft_scans_pt_FullComb_LO_Chg = SubmitSMEFTScans(
 )
 
 create_smeft_workspace_pt_PCA_FullComb = CreateSMEFTWorkspace(
-    datacard="{}/CombinedCards/smH_PTH/HggHZZHWWHttHbbVBFHttBoost.txt".format(root_dir),
+    datacard="{}/CombinedCards/smH_PTH/HggHZZHWWHttHbbVBFHttBoost_smeft.txt".format(root_dir),
     model="230620PruneNoCPEVPtFullCombLinearised",
     equations="CMS-ForDiff-230530_rotated230620PruneNoCPPtFullCombA",
     chan_obs="PtFullComb",
     linearised=True,
-    combine_cards=combine_cards_sm_pt_HggHZZHWWHttHbbVBFHttBoost,
+    combine_cards=combine_cards_smeft_pt_HggHZZHWWHttHbbVBFHttBoost,
 )
 
 submit_smeft_scans_pt_FullComb_PCA_asimov = SubmitSMEFTScans(
     category="asimov",
     skip_twod=True,
     create_smeft_workspace=create_smeft_workspace_pt_PCA_FullComb,
+)
+
+submit_smeft_scans_pt_FullComb_PCA_asimov_statonly = SubmitSMEFTScans(
+    category="statonly_asimov",
+    skip_twod=True,
+    create_smeft_workspace=create_smeft_workspace_pt_PCA_FullComb,
+    full_stat_task=submit_smeft_scans_pt_FullComb_PCA_asimov,
 )
 
 submit_instances_smeft = {
@@ -1113,6 +1349,7 @@ submit_instances_smeft = {
     "pt_FullComb_LO_Chg_asimov": submit_smeft_scans_pt_FullComb_LO_Chg_asimov,
     "pt_FullComb_LO_Chg": submit_smeft_scans_pt_FullComb_LO_Chg,
     "pt_FullComb_PCA_asimov": submit_smeft_scans_pt_FullComb_PCA_asimov,
+    "pt_FullComb_PCA_asimov_statonly": submit_smeft_scans_pt_FullComb_PCA_asimov_statonly,
 }
 
 class PlotSMEFTScans(BaseNotifierClass):
@@ -1310,17 +1547,29 @@ instances = {
     "SM_pt_HWW": plot_sm_cross_section_pt_HWW,
     "SM_pt_Htt": plot_sm_cross_section_pt_Htt,
     "SM_pt_HggHZZ": plot_sm_cross_section_pt_HggHZZ,
+    "SM_pt_HggHZZHWWHttHbbVBFHttBoost_asimov_alone": plot_sm_cross_section_pt_HggHZZHWWHttHbbVBFHttBoost_asimov_alone,
     "SM_pt_HggHZZHWWHttHbbVBFHttBoost_asimov": plot_sm_cross_section_pt_HggHZZHWWHttHbbVBFHttBoost_asimov,
     "SM_Njets_Hgg": plot_sm_cross_section_Njets_Hgg,
     "SM_Njets_HZZ": plot_sm_cross_section_Njets_HZZ,
     "SM_Njets_HWW": plot_sm_cross_section_Njets_HWW,
     "SM_Njets_Htt": plot_sm_cross_section_Njets_Htt,
     "SM_Njets_HggHZZHWWHtt": plot_sm_cross_section_Njets_HggHZZHWWHtt,
+    "SM_Njets_HggHZZHWWHtt_asimov": plot_sm_cross_section_Njets_HggHZZHWWHtt_asimov,
+    "SM_Njets_HggHZZHWWHtt_asimov_alone": plot_sm_cross_section_Njets_HggHZZHWWHtt_asimov_alone,
     "SM_yH_HggHZZ": plot_sm_cross_section_yH_HggHZZ,
+    "SM_yH_HggHZZ_asimov": plot_sm_cross_section_yH_HggHZZ_asimov,
+    "SM_yH_HggHZZ_asimov_alone": plot_sm_cross_section_yH_HggHZZ_asimov_alone,
     "SM_ptj_HggHZZHttBoost_asimov": plot_sm_cross_section_ptj_HggHZZHttBoost_asimov, 
+    "SM_ptj_HggHZZHttBoost_asimov_alone": plot_sm_cross_section_ptj_HggHZZHttBoost_asimov_alone, 
     "SM_mjj_HggHZZ": plot_sm_cross_section_mjj_HggHZZ,
+    "SM_mjj_HggHZZ_asimov": plot_sm_cross_section_mjj_HggHZZ_asimov,
+    "SM_mjj_HggHZZ_asimov_alone": plot_sm_cross_section_mjj_HggHZZ_asimov_alone,
     "SM_detajj_HggHZZ": plot_sm_cross_section_detajj_HggHZZ,
+    "SM_detajj_HggHZZ_asimov": plot_sm_cross_section_detajj_HggHZZ_asimov,
+    "SM_detajj_HggHZZ_asimov_alone": plot_sm_cross_section_detajj_HggHZZ_asimov_alone,
     "SM_taucj_HggHZZ": plot_sm_cross_section_taucj_HggHZZ,
+    "SM_taucj_HggHZZ_asimov": plot_sm_cross_section_taucj_HggHZZ_asimov,
+    "SM_taucj_HggHZZ_asimov_alone": plot_sm_cross_section_taucj_HggHZZ_asimov_alone,
     "kappa_YukawaConstrained_HggHZZHtt_asimov": plot_kappa_YukawaConstrained_HggHZZHtt_asimov,
     "kappa_YukawaFloat_HggHZZHtt_asimov": plot_kappa_YukawaFloat_HggHZZHtt_asimov,
     "kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov": plot_kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov,

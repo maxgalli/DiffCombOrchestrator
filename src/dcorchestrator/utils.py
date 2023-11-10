@@ -6,6 +6,8 @@ import requests
 
 
 def run_list_of_commands(list_of_commands):
+    print("Running list of commands:")
+    print(list_of_commands)
     for command in list_of_commands:
         process = subprocess.Popen(
             command,

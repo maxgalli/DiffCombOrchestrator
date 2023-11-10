@@ -28,3 +28,4 @@ htmlcov/
 
 # Misc
 .DS_Store
+.logs

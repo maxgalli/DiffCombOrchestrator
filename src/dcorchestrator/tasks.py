@@ -146,6 +146,9 @@ class SubmitSMScans(BaseNotifierClass):
             return self.output().exists()
 
     def run(self):
+        # create output directory if it doesn't exist
+        if not os.path.exists(self.full_output_dir):
+            os.makedirs(self.full_output_dir)
         commands = [
             "submit_scans.py --model SM --observable {} --category {} --input-dir {}/SM/{} --output-dir {} --force-output-name".format(
                 self.observable,
@@ -155,6 +158,7 @@ class SubmitSMScans(BaseNotifierClass):
                 self.full_output_dir,
             ) + " --global-fit-file {}".format(self.global_fit_file) * bool(self.global_fit_file),
         ]
+        print("Running commands: {}".format(commands))
         run_list_of_commands(commands)
         if self.has_jobs:
             # wait 60 seconds for the jobs to be submitted
@@ -314,6 +318,7 @@ class SubmitSMEFTScans(BaseNotifierClass):
     submodel = luigi.Parameter(default=None)
     skip_twod = luigi.BoolParameter(default=False)
     create_smeft_workspace = luigi.TaskParameter()
+    full_stat_task = luigi.TaskParameter(default=AlwaysCompleteTask())
     has_jobs = luigi.BoolParameter(default=True)
 
     def __init__(self, *args, **kwargs):
@@ -350,6 +355,10 @@ class SubmitSMEFTScans(BaseNotifierClass):
             self.submodel,
             full_category,
         )
+        try:
+            self.global_fit_dir = self.full_stat_task.output_dir
+        except AttributeError:
+            self.global_fit_dir = None
 
     def requires(self):
         return self.create_smeft_workspace
@@ -389,6 +398,7 @@ class SubmitSMEFTScans(BaseNotifierClass):
                 self.submodel_config_file,
             )
             + " --skip-2d" * self.skip_twod
+            + " --global-fit-dir {}".format(self.global_fit_dir) * bool(self.global_fit_dir),
         ]
         run_list_of_commands(commands)
         if self.has_jobs:

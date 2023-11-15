@@ -51,6 +51,49 @@ class CombineCards(BaseNotifierClass):
             "combineCards.py {}".format(" ".join(self.channels))
             + " > {}".format(self.output_card_name)
         ]
+        to_further_append = """
+#param_alphaS
+nuisance edit add .*h(tt|ww|zz|zg|gg|mm)                  *                param_alphaS lnN 1.006
+nuisance edit add .*hbb                                   *                param_alphaS lnN 0.992
+nuisance edit add .*hcc                                   *                param_alphaS lnN 0.987
+nuisance edit add .*hgluglu                               *                param_alphaS lnN 1.036
+
+#param_mB
+nuisance edit add .*h(ww|zz|gg|tt|zg|mm|cc|gluglu)        *                param_mB lnN 0.990
+nuisance edit add .*hbb                                   *                param_mB lnN 1.007
+
+#param_mC
+nuisance edit add .*hcc                                   *                param_mC lnN 1.051
+
+#param_mt -- 0,1 constraint global on this parameter
+param_mt param 0 1
+
+#HiggsDecayWidthTHU_hqq
+nuisance edit add .*h(ww|zz|gg|tt|zg|mm|gluglu)           *                HiggsDecayWidthTHU_hqq lnN 0.997
+nuisance edit add .*h(bb|cc)                              *                HiggsDecayWidthTHU_hqq lnN 1.002
+
+#HiggsDecayWidthTHU_hvv
+nuisance edit add .*h(ww|zz)                              *                HiggsDecayWidthTHU_hvv lnN 1.004
+
+#HiggsDecayWidthTHU_hll
+nuisance edit add .*h(tt|mm)                              *                HiggsDecayWidthTHU_hll lnN 1.005
+
+#HiggsDecayWidthTHU_hgg
+nuisance edit add .*hgg                                   *                HiggsDecayWidthTHU_hgg lnN 1.010
+
+#HiggsDecayWidthTHU_hzg
+nuisance edit add .*hzg                                   *                HiggsDecayWidthTHU_hzg lnN 1.050
+
+#HiggsDecayWidthTHU_hgluglu
+nuisance edit add .*hgluglu                               *                HiggsDecayWidthTHU_hgluglu lnN 1.029
+"""
+
+        to_further_append_systematics = """
+nuisance edit rename * httboost.* THU_ggH_VBF3j_ THU_ggH_VBF3j 
+"""
+        commands.append("echo '{}' >> {}".format(to_further_append, self.output_card_name))
+        commands.append("echo '{}' >> {}".format(to_further_append_systematics, self.output_card_name))
+        
         run_list_of_commands(commands)
 
         if self.replace_mass:

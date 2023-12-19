@@ -163,6 +163,11 @@ create_sm_workspace_pt_HggHZZHWWHttHbbVBFHttBoost = CreateSMWorkspace(
     combine_cards=combine_cards_sm_pt_HggHZZHWWHttHbbVBFHttBoost,
 )
 
+submit_sm_scans_pt_HggHZZHWWHttHbbVBFHttBoost = SubmitSMScans(
+    category="HggHZZHWWHttHbbVBFHttBoost",
+    create_sm_workspace=create_sm_workspace_pt_HggHZZHWWHttHbbVBFHttBoost,
+)
+
 submit_sm_scans_pt_HggHZZHWWHttHbbVBFHttBoost_asimov = SubmitSMScans(
     category="HggHZZHWWHttHbbVBFHttBoost_asimov",
     create_sm_workspace=create_sm_workspace_pt_HggHZZHWWHttHbbVBFHttBoost,
@@ -674,6 +679,7 @@ submit_instances = {
     "SM_pt_HbbVBF": submit_sm_scans_pt_HbbVBF,
     "SM_pt_HbbVBF_asimov": submit_sm_scans_pt_HbbVBF_asimov,
     "SM_pt_HggHZZ": submit_sm_scans_pt_HggHZZ,
+    "SM_pt_HggHZZHWWHttHbbVBFHttBoost": submit_sm_scans_pt_HggHZZHWWHttHbbVBFHttBoost,
     "SM_pt_HggHZZHWWHttHbbVBFHttBoost_asimov": submit_sm_scans_pt_HggHZZHWWHttHbbVBFHttBoost_asimov,
     "SM_pt_HggHZZHWWHttHbbVBFHttBoost_asimov_statonly": submit_sm_scans_pt_HggHZZHWWHttHbbVBFHttBoost_asimov_statonly,
     "SM_Njets_Hgg": submit_sm_scans_Njets_Hgg,
@@ -767,6 +773,7 @@ class PlotSMCrossSection(BaseNotifierClass):
         return required_tasks
 
     def run(self):
+        os.environ["KRB5CCNAME"] = "/t3home/gallim/krb5cc_722"
         commands = [
             "kinit -R",
             "eosfusebind -g krb5 $HOME/krb5cc_$UID",
@@ -1099,6 +1106,7 @@ class PlotKappaLimits(BaseNotifierClass):
             "TopKbKtConstrained": "top_coupdep_ctcb",
             "TopKbKtFloat": "top_floatingBR_ctcb",
         }
+        os.environ["KRB5CCNAME"] = "/t3home/gallim/krb5cc_722"
         commands = [
             "kinit -R",
             "eosfusebind -g krb5 $HOME/krb5cc_$UID",
@@ -1372,6 +1380,7 @@ class PlotSMEFTScans(BaseNotifierClass):
         return [submit_instances_smeft[scan] for scan in self.submit_smeft_scans]
     
     def run(self):
+        os.environ["KRB5CCNAME"] = "/t3home/gallim/krb5cc_722"
         commands = [
             "kinit -R",
             "eosfusebind -g krb5 $HOME/krb5cc_$UID",

@@ -34,6 +34,61 @@ def replace_mass_in_card(card):
             f.write(line)
 
 
+def change_ooa_number_in_card(card):
+    with open(card) as f:
+        lines = f.readlines()
+        process_lines = []
+        for line in lines:
+            if line.startswith("process"):
+                process_lines.append(line.split()[1:])
+        process_names, process_numbers = process_lines
+
+    # make a dictionary of process names and numbers
+    process_dict = {}
+    for name, number in zip(process_names, process_numbers):
+        if name not in process_dict:
+            process_dict[name] = int(number)
+    #print(process_dict)
+    #print(len(process_dict))
+
+    # order the dictionary by number
+    process_dict = dict(sorted(process_dict.items(), key=lambda item: item[1]))
+    #print(process_dict)
+
+    # change the number corresponding to the process name OutsideAcceptance to a a positive number and change the negative numbers so that they are consecutive
+    if "OutsideAcceptance" in process_dict:
+        max_value = max(process_dict.values())
+        current_ooa_value = process_dict["OutsideAcceptance"]
+        process_dict["OutsideAcceptance"] = max_value + 1
+
+        for key, value in process_dict.items():
+            if value < current_ooa_value:
+                process_dict[key] = value + 1
+
+        process_dict = dict(sorted(process_dict.items(), key=lambda item: item[1]))
+        #print(process_dict)
+
+        # make new process number line
+        new_process_numbers = []
+        for name in process_names:
+            new_process_numbers.append(str(process_dict[name]))
+
+        # add to lines and write to file
+        # get index of process line
+        index = 0
+        for i, line in enumerate(lines):
+            if line.startswith("process"):
+                index = i
+                break
+        index += 1
+
+        # replace process numbers
+        lines[index] = "process " + " ".join(new_process_numbers) + "\n"
+
+        with open(card, "w") as f:
+            f.writelines(lines)
+
+
 class CombineCards(BaseNotifierClass):
     channels = luigi.ListParameter()
     output_card_name = luigi.Parameter()
@@ -88,16 +143,46 @@ nuisance edit add .*hzg                                   *                Higgs
 nuisance edit add .*hgluglu                               *                HiggsDecayWidthTHU_hgluglu lnN 1.029
 """
 
-        to_further_append_systematics = """
-nuisance edit rename * httboost.* THU_ggH_VBF3j_ THU_ggH_VBF3j 
+# note: CMS_res_j_18 is removed when runnung combineCards.py because of its small effect
+# (check parseCard function)
+# ifexists option does not seem to work, so remove the line completely
+        to_further_append_systematics_httboost = """
+nuisance edit rename * httboost.* THU_ggH_Mig01_ THU_ggH_Mig01 ifexists
+nuisance edit rename * httboost.* THU_ggH_Mig12_ THU_ggH_Mig12 ifexists
+nuisance edit rename * httboost.* THU_ggH_Mu_ THU_ggH_Mu ifexists
+nuisance edit rename * httboost.* THU_ggH_PT120_ THU_ggH_PT120 ifexists
+nuisance edit rename * httboost.* THU_ggH_PT60_ THU_ggH_PT60 ifexists
+nuisance edit rename * httboost.* THU_ggH_Res_ THU_ggH_Res ifexists
+nuisance edit rename * httboost.* THU_ggH_VBF2j_ THU_ggH_VBF2j ifexists
+nuisance edit rename * httboost.* THU_ggH_VBF3j_ THU_ggH_VBF3j ifexists
+nuisance edit rename * httboost.* THU_ggH_qmtop_ THU_ggH_qmtop ifexists
+nuisance edit rename * httboost.* CMS_res_j2016 CMS_res_j_2016 ifexists
+nuisance edit rename * httboost.* CMS_res_j2017 CMS_res_j_2017 ifexists
+nuisance edit rename * httboost.* CMS_res_j2018 CMS_res_j_2018 ifexists
+nuisance edit rename * httboost.* CMS_scale_j2016 CMS_scale_j_2016 ifexists
+nuisance edit rename * httboost.* CMS_scale_j2017 CMS_scale_j_2017 ifexists
+nuisance edit rename * httboost.* CMS_scale_j2018 CMS_scale_j_2018 ifexists
+nuisance edit rename * httboost.* CMS_scale_met_unclustered2016 CMS_scale_met_unclustered_2016 ifexists
+nuisance edit rename * httboost.* CMS_scale_met_unclustered2017 CMS_scale_met_unclustered_2017 ifexists
+nuisance edit rename * httboost.* CMS_scale_met_unclustered2018 CMS_scale_met_unclustered_2018 ifexists
+"""
+
+        to_further_append_systematics_hgg = """
+nuisance edit rename * hgg.* CMS_res_j_16 CMS_res_j_2016 ifexists
+nuisance edit rename * hgg.* CMS_res_j_17 CMS_res_j_2017 ifexists
 """
         commands.append("echo '{}' >> {}".format(to_further_append, self.output_card_name))
-        commands.append("echo '{}' >> {}".format(to_further_append_systematics, self.output_card_name))
+        if "HttBoost" in self.output_card_name:
+            commands.append("echo '{}' >> {}".format(to_further_append_systematics_httboost, self.output_card_name))
+        if "Hgg" in self.output_card_name:
+            commands.append("echo '{}' >> {}".format(to_further_append_systematics_hgg, self.output_card_name))
         
         run_list_of_commands(commands)
 
         if self.replace_mass:
             replace_mass_in_card(self.output_card_name)
+
+        change_ooa_number_in_card(self.output_card_name)
         
         self.send_notification_complete()
 

@@ -55,15 +55,16 @@ def change_ooa_number_in_card(card):
     process_dict = dict(sorted(process_dict.items(), key=lambda item: item[1]))
     #print(process_dict)
 
-    # change the number corresponding to the process name OutsideAcceptance to a a positive number and change the negative numbers so that they are consecutive
-    if "OutsideAcceptance" in process_dict:
-        max_value = max(process_dict.values())
-        current_ooa_value = process_dict["OutsideAcceptance"]
-        process_dict["OutsideAcceptance"] = max_value + 1
-
-        for key, value in process_dict.items():
-            if value < current_ooa_value:
-                process_dict[key] = value + 1
+    # for all processes which contain OutsideAcceptance in the name, assign a negative number
+    to_change = [k for k, v in process_dict.items() if "OutsideAcceptance" in k and v > 0]
+    if to_change:
+        for key in to_change:
+            min_value = min(process_dict.values())
+            current_ooa_value = process_dict[key]
+            process_dict[key] = min_value - 1
+            for key, value in process_dict.items():
+                if value > current_ooa_value:
+                    process_dict[key] = value - 1
 
         process_dict = dict(sorted(process_dict.items(), key=lambda item: item[1]))
         #print(process_dict)

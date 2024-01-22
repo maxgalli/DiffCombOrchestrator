@@ -1366,6 +1366,7 @@ class PlotSMEFTScans(BaseNotifierClass):
     how = luigi.Parameter()
     skip_twod = luigi.BoolParameter(default=False)
     force_twod_lim = luigi.BoolParameter(default=False)
+    summary_plot = luigi.BoolParameter(default=False)
     submit_smeft_scans = luigi.ListParameter()
     
     def __init__(self, *args, **kwargs):
@@ -1393,7 +1394,7 @@ class PlotSMEFTScans(BaseNotifierClass):
                 self.combination,
                 self.how,
                 self.cuts_file,
-            ) + " --skip-2d" * self.skip_twod + " --force-2D-limit" * self.force_twod_lim,
+            ) + " --skip-2d" * self.skip_twod + " --force-2D-limit" * self.force_twod_lim + " --summary-plot" * self.summary_plot,
         ]
         run_list_of_commands(commands)
         self.send_notification_complete()
@@ -1548,6 +1549,7 @@ plot_smeft_pt_FullComb_PCA_asimov = PlotSMEFTScans(
     how="expected",
     skip_twod=True,
     submit_smeft_scans=["pt_FullComb_PCA_asimov"],
+    summary_plot=True,
     force_twod_lim=False,
 )
 

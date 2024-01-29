@@ -53,14 +53,16 @@ def get_list_of_jobs_from_file(file_path):
 
 
 def get_job_status(job_id):
-    try:
-        output = subprocess.check_output(
-            ["sacct", "-j", job_id, "--format", "State", "--noheader"]
-        )
-        status = output.decode("utf-8").strip()
-        return status
-    except subprocess.CalledProcessError:
-        return None
+    while True:
+        try:
+            output = subprocess.check_output(
+                ["sacct", "-j", job_id, "--format", "State", "--noheader"]
+            )
+            status = output.decode("utf-8").strip()
+            return status
+        except subprocess.CalledProcessError:
+            print('Failed to get job status. Retrying...')
+            time.sleep(1)
 
 
 def check_job_status(job_ids, get_job_status, progress_bar):
@@ -83,7 +85,7 @@ def check_job_status(job_ids, get_job_status, progress_bar):
             progress_bar.close()
             return
 
-        time.sleep(5)  # Delay for 5 seconds
+        time.sleep(10)  # Delay for 5 seconds
 
 
 def create_full_dir_name(output_dir, observable, category):

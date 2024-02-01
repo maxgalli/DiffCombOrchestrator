@@ -1787,6 +1787,15 @@ plot_smeft_pt_FullComb_NLO_Chb_asimovbkg = PlotSMEFTScans(
     force_twod_lim=True,
 )
 
+plot_smeft_pt_FullComb_NLO_Chb = PlotSMEFTScans(
+    categories=["PtFullComb"],
+    combination="PtFullComb",
+    how="observed",
+    skip_twod=False,
+    submit_smeft_scans=["pt_FullComb_NLO_Chb"],
+    force_twod_lim=True,
+)
+
 plot_smeft_pt_FullComb_NLO_Chw_asimov = PlotSMEFTScans(
     categories=["PtFullComb"],
     combination="PtFullComb",
@@ -1802,6 +1811,15 @@ plot_smeft_pt_FullComb_NLO_Chw_asimovbkg = PlotSMEFTScans(
     how="expected-bkg",
     skip_twod=False,
     submit_smeft_scans=["pt_FullComb_NLO_Chw_asimov", "pt_FullComb_NLO_Chw"],
+    force_twod_lim=True,
+)
+
+plot_smeft_pt_FullComb_NLO_Chw = PlotSMEFTScans(
+    categories=["PtFullComb"],
+    combination="PtFullComb",
+    how="observed",
+    skip_twod=False,
+    submit_smeft_scans=["pt_FullComb_NLO_Chw"],
     force_twod_lim=True,
 )
 
@@ -1823,6 +1841,15 @@ plot_smeft_pt_FullComb_NLO_Chwb_asimovbkg = PlotSMEFTScans(
     force_twod_lim=True,
 )
 
+plot_smeft_pt_FullComb_NLO_Chwb = PlotSMEFTScans(
+    categories=["PtFullComb"],
+    combination="PtFullComb",
+    how="observed",
+    skip_twod=False,
+    submit_smeft_scans=["pt_FullComb_NLO_Chwb"],
+    force_twod_lim=True,
+)
+
 plot_smeft_pt_FullComb_LO_Chg_asimov = PlotSMEFTScans(
     categories=["PtFullComb"],
     combination="PtFullComb",
@@ -1838,6 +1865,15 @@ plot_smeft_pt_FullComb_LO_Chg_asimovbkg = PlotSMEFTScans(
     how="expected-bkg",
     skip_twod=False,
     submit_smeft_scans=["pt_FullComb_LO_Chg_asimov", "pt_FullComb_LO_Chg"],
+    force_twod_lim=True,
+)
+
+plot_smeft_pt_FullComb_LO_Chg = PlotSMEFTScans(
+    categories=["PtFullComb"],
+    combination="PtFullComb",
+    how="observed",
+    skip_twod=False,
+    submit_smeft_scans=["pt_FullComb_LO_Chg"],
     force_twod_lim=True,
 )
 
@@ -1911,12 +1947,16 @@ instances = {
     "smeft_DeltaPhiJJ_LO_Chg_HggHZZ": plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ,
     "smeft_DeltaPhiJJ_LO_Chg_HggHZZ_asimov": plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ_asimov,
     "smeft_DeltaPhiJJ_LO_Chg_HggHZZ_asimovbkg": plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ_asimovbkg,
+    "smeft_pt_FullComb_NLO_Chb": plot_smeft_pt_FullComb_NLO_Chb,
     "smeft_pt_FullComb_NLO_Chb_asimov": plot_smeft_pt_FullComb_NLO_Chb_asimov,
     "smeft_pt_FullComb_NLO_Chb_asimovbkg": plot_smeft_pt_FullComb_NLO_Chb_asimovbkg,
+    "smeft_pt_FullComb_NLO_Chw": plot_smeft_pt_FullComb_NLO_Chw,
     "smeft_pt_FullComb_NLO_Chw_asimov": plot_smeft_pt_FullComb_NLO_Chw_asimov,
     "smeft_pt_FullComb_NLO_Chw_asimovbkg": plot_smeft_pt_FullComb_NLO_Chw_asimovbkg,
+    "smeft_pt_FullComb_NLO_Chwb": plot_smeft_pt_FullComb_NLO_Chwb,
     "smeft_pt_FullComb_NLO_Chwb_asimov": plot_smeft_pt_FullComb_NLO_Chwb_asimov,
     "smeft_pt_FullComb_NLO_Chwb_asimovbkg": plot_smeft_pt_FullComb_NLO_Chwb_asimovbkg,
+    "smeft_pt_FullComb_LO_Chg": plot_smeft_pt_FullComb_LO_Chg,
     "smeft_pt_FullComb_LO_Chg_asimov": plot_smeft_pt_FullComb_LO_Chg_asimov,
     "smeft_pt_FullComb_LO_Chg_asimovbkg": plot_smeft_pt_FullComb_LO_Chg_asimovbkg,
     "smeft_pt_FullComb_PCA_asimov": plot_smeft_pt_FullComb_PCA_asimov,

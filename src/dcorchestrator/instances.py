@@ -205,6 +205,13 @@ submit_sm_scans_pt_FinalComb = SubmitSMScans(
     create_sm_workspace=create_sm_workspace_pt_FinalComb,
 )
 
+submit_sm_scans_pt_FinalComb_statonly = SubmitSMScans(
+    category="FinalComb_statonly",
+    create_sm_workspace=create_sm_workspace_pt_FinalComb,
+    full_stat_task=submit_sm_scans_pt_FinalComb,
+    global_fit_file="higgsCombine_POSTFIT_FinalComb.MultiDimFit.mH125.38.root",
+)
+
 submit_sm_scans_pt_FinalComb_asimov = SubmitSMScans(
     category="FinalComb_asimov",
     create_sm_workspace=create_sm_workspace_pt_FinalComb,
@@ -758,6 +765,7 @@ submit_instances = {
     "SM_pt_HggHZZHWWHttHbbVBFHttBoost_asimov": submit_sm_scans_pt_HggHZZHWWHttHbbVBFHttBoost_asimov,
     "SM_pt_HggHZZHWWHttHbbVBFHttBoost_asimov_statonly": submit_sm_scans_pt_HggHZZHWWHttHbbVBFHttBoost_asimov_statonly,
     "SM_pt_FinalComb": submit_sm_scans_pt_FinalComb,
+    "SM_pt_FinalComb_statonly": submit_sm_scans_pt_FinalComb_statonly,
     "SM_pt_FinalComb_asimov": submit_sm_scans_pt_FinalComb_asimov,
     "SM_pt_FinalComb_asimov_statonly": submit_sm_scans_pt_FinalComb_asimov_statonly,
     "SM_Njets_Hgg": submit_sm_scans_Njets_Hgg,
@@ -932,6 +940,31 @@ plot_sm_cross_section_pt_HggHZZHWWHttHbbVBFHttBoost_asimov = PlotSMCrossSection(
     ],
 )
 
+plot_sm_cross_section_pt_FinalComb_alone = PlotSMCrossSection(
+    categories=["FinalComb"],
+    systematic_bands="FinalComb",
+    submit_sm_scans=[
+        "SM_pt_FinalComb",
+        "SM_pt_FinalComb_statonly",
+    ],
+)
+
+plot_sm_cross_section_pt_FinalComb = PlotSMCrossSection(
+    categories=["FinalComb", "Hgg", "HZZ", "HWW"],
+    singles=["Htt", "HbbVBF", "HttBoost"],
+    systematic_bands="FinalComb",
+    submit_sm_scans=[
+        "SM_pt_FinalComb",
+        "SM_pt_FinalComb_statonly",
+        "SM_pt_Hgg",
+        "SM_pt_HZZ",
+        "SM_pt_HWW",
+        "SM_pt_Htt",
+        "SM_pt_HbbVBF",
+        "SM_pt_HttBoost",
+    ],
+)
+
 plot_sm_cross_section_pt_FinalComb_asimov_alone = PlotSMCrossSection(
     categories=["FinalComb"],
     systematic_bands="FinalComb",
@@ -956,6 +989,7 @@ plot_sm_cross_section_pt_FinalComb_asimov = PlotSMCrossSection(
         "SM_pt_HttBoost_asimov",
     ],
 )
+
 plot_sm_cross_section_Njets_Hgg = PlotSMCrossSection(
     categories=["Hgg"],
     submit_sm_scans=["SM_Njets_Hgg"],
@@ -1185,8 +1219,18 @@ submit_kappa_scan_YukawaConstrained_HggHZZHtt_asimov = SubmitKappaScans(
     create_kappa_workspace=create_kappa_workspace_YukawaConstrained_HggHZZHtt,
 )
 
+submit_kappa_scan_YukawaConstrained_HggHZZHtt = SubmitKappaScans(
+    category="HggHZZHtt",
+    create_kappa_workspace=create_kappa_workspace_YukawaConstrained_HggHZZHtt,
+)
+
 submit_kappa_scan_YukawaFloat_HggHZZHtt_asimov = SubmitKappaScans(
     category="HggHZZHtt_asimov",
+    create_kappa_workspace=create_kappa_workspace_YukawaFloat_HggHZZHtt,
+)
+
+submit_kappa_scan_YukawaFloat_HggHZZHtt = SubmitKappaScans(
+    category="HggHZZHtt",
     create_kappa_workspace=create_kappa_workspace_YukawaFloat_HggHZZHtt,
 )
 
@@ -1195,8 +1239,18 @@ submit_kappa_scan_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov = SubmitKapp
     create_kappa_workspace=create_kappa_workspace_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF,
 )
 
+submit_kappa_scan_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF = SubmitKappaScans(
+    category="HggHZZHttHttBoostHbbVBF",
+    create_kappa_workspace=create_kappa_workspace_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF,
+)
+
 submit_kappa_scan_TopCgKtFloat_HggHZZHttHttBoostHbbVBF_asimov = SubmitKappaScans(
     category="HggHZZHttHttBoostHbbVBF_asimov",
+    create_kappa_workspace=create_kappa_workspace_TopCgKtFloat_HggHZZHttHttBoostHbbVBF,
+)
+
+submit_kappa_scan_TopCgKtFloat_HggHZZHttHttBoostHbbVBF = SubmitKappaScans(
+    category="HggHZZHttHttBoostHbbVBF",
     create_kappa_workspace=create_kappa_workspace_TopCgKtFloat_HggHZZHttHttBoostHbbVBF,
 )
 
@@ -1205,18 +1259,34 @@ submit_kappa_scan_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF_asimov = SubmitKapp
     create_kappa_workspace=create_kappa_workspace_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF,
 )
 
+submit_kappa_scan_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF = SubmitKappaScans(
+    category="HggHZZHttHttBoostHbbVBF",
+    create_kappa_workspace=create_kappa_workspace_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF,
+)
+
 submit_kappa_scan_TopKbKtFloat_HggHZZHttHttBoostHbbVBF_asimov = SubmitKappaScans(
     category="HggHZZHttHttBoostHbbVBF_asimov",
     create_kappa_workspace=create_kappa_workspace_TopKbKtFloat_HggHZZHttHttBoostHbbVBF,
 )
 
+submit_kappa_scan_TopKbKtFloat_HggHZZHttHttBoostHbbVBF = SubmitKappaScans(
+    category="HggHZZHttHttBoostHbbVBF",
+    create_kappa_workspace=create_kappa_workspace_TopKbKtFloat_HggHZZHttHttBoostHbbVBF,
+)
+
 submit_instances_kappa = {
     "YukawaConstrained_HggHZZHtt_asimov": submit_kappa_scan_YukawaConstrained_HggHZZHtt_asimov,
+    "YukawaConstrained_HggHZZHtt": submit_kappa_scan_YukawaConstrained_HggHZZHtt,
     "YukawaFloat_HggHZZHtt_asimov": submit_kappa_scan_YukawaFloat_HggHZZHtt_asimov,
+    "YukawaFloat_HggHZZHtt": submit_kappa_scan_YukawaFloat_HggHZZHtt,
     "TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov": submit_kappa_scan_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov,
+    "TopCgKtConstrained_HggHZZHttHttBoostHbbVBF": submit_kappa_scan_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF,
     "TopCgKtFloat_HggHZZHttHttBoostHbbVBF_asimov": submit_kappa_scan_TopCgKtFloat_HggHZZHttHttBoostHbbVBF_asimov,
+    "TopCgKtFloat_HggHZZHttHttBoostHbbVBF": submit_kappa_scan_TopCgKtFloat_HggHZZHttHttBoostHbbVBF,
     "TopKbKtConstrained_HggHZZHttHttBoostHbbVBF_asimov": submit_kappa_scan_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF_asimov,
+    "TopKbKtConstrained_HggHZZHttHttBoostHbbVBF": submit_kappa_scan_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF,
     "TopKbKtFloat_HggHZZHttHttBoostHbbVBF_asimov": submit_kappa_scan_TopKbKtFloat_HggHZZHttHttBoostHbbVBF_asimov,
+    "TopKbKtFloat_HggHZZHttHttBoostHbbVBF": submit_kappa_scan_TopKbKtFloat_HggHZZHttHttBoostHbbVBF,
 }
 
 
@@ -1279,11 +1349,25 @@ plot_kappa_YukawaConstrained_HggHZZHtt_asimov = PlotKappaLimits(
     submit_kappa_scans=["YukawaConstrained_HggHZZHtt_asimov"],
 )
 
+plot_kappa_YukawaConstrained_HggHZZHtt = PlotKappaLimits(
+    categories=["HggHZZHtt"],
+    combination="HggHZZHtt",
+    asimov=False,
+    submit_kappa_scans=["YukawaConstrained_HggHZZHtt"],
+)
+
 plot_kappa_YukawaFloat_HggHZZHtt_asimov = PlotKappaLimits(
     categories=["HggHZZHtt"],
     combination="HggHZZHtt",
     asimov=True,
     submit_kappa_scans=["YukawaFloat_HggHZZHtt_asimov"],
+)
+
+plot_kappa_YukawaFloat_HggHZZHtt = PlotKappaLimits(
+    categories=["HggHZZHtt"],
+    combination="HggHZZHtt",
+    asimov=False,
+    submit_kappa_scans=["YukawaFloat_HggHZZHtt"],
 )
 
 plot_kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov = PlotKappaLimits(
@@ -1293,11 +1377,25 @@ plot_kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov = PlotKappaLimits(
     submit_kappa_scans=["TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov"],
 )
 
+plot_kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF = PlotKappaLimits(
+    categories=["HggHZZHttHttBoostHbbVBF"],
+    combination="HggHZZHttHttBoostHbbVBF",
+    asimov=True,
+    submit_kappa_scans=["TopCgKtConstrained_HggHZZHttHttBoostHbbVBF"],
+)
+
 plot_kappa_TopCgKtFloat_HggHZZHttHttBoostHbbVBF_asimov = PlotKappaLimits(
     categories=["HggHZZHttHttBoostHbbVBF"],
     combination="HggHZZHttHttBoostHbbVBF",
     asimov=True,
     submit_kappa_scans=["TopCgKtFloat_HggHZZHttHttBoostHbbVBF_asimov"],
+)
+
+plot_kappa_TopCgKtFloat_HggHZZHttHttBoostHbbVBF = PlotKappaLimits(
+    categories=["HggHZZHttHttBoostHbbVBF"],
+    combination="HggHZZHttHttBoostHbbVBF",
+    asimov=True,
+    submit_kappa_scans=["TopCgKtFloat_HggHZZHttHttBoostHbbVBF"],
 )
 
 plot_kappa_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF_asimov = PlotKappaLimits(
@@ -1307,11 +1405,25 @@ plot_kappa_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF_asimov = PlotKappaLimits(
     submit_kappa_scans=["TopKbKtConstrained_HggHZZHttHttBoostHbbVBF_asimov"],
 )
 
+plot_kappa_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF = PlotKappaLimits(
+    categories=["HggHZZHttHttBoostHbbVBF"],
+    combination="HggHZZHttHttBoostHbbVBF",
+    asimov=False,
+    submit_kappa_scans=["TopKbKtConstrained_HggHZZHttHttBoostHbbVBF"],
+)
+
 plot_kappa_TopKbKtFloat_HggHZZHttHttBoostHbbVBF_asimov = PlotKappaLimits(
     categories=["HggHZZHttHttBoostHbbVBF"],
     combination="HggHZZHttHttBoostHbbVBF",
     asimov=True,
     submit_kappa_scans=["TopKbKtFloat_HggHZZHttHttBoostHbbVBF_asimov"],
+)
+
+plot_kappa_TopKbKtFloat_HggHZZHttHttBoostHbbVBF = PlotKappaLimits(
+    categories=["HggHZZHttHttBoostHbbVBF"],
+    combination="HggHZZHttHttBoostHbbVBF",
+    asimov=False,
+    submit_kappa_scans=["TopKbKtFloat_HggHZZHttHttBoostHbbVBF"],
 )
 
 """
@@ -1534,17 +1646,18 @@ class PlotSMEFTScans(BaseNotifierClass):
         commands = [
             "kinit -R",
             "eosfusebind -g krb5 $HOME/krb5cc_$UID",
-            "plot_SMEFT_scans.py --how submodel --input-dir {} --output-dir {} --model {} --submodel {} --categories {} --combination {} --{} --config-file {}".format(
+            "plot_SMEFT_scans.py --how submodel --input-dir {} --output-dir {} --model {} --submodel {} --categories {} --combination {} --config-file {}".format(
                 self.input_dir,
                 self.output_dir,
                 self.model,
                 self.submodel_config_file,
                 " ".join(self.categories),
                 self.combination,
-                self.how,
                 self.cuts_file,
             ) + " --skip-2d" * self.skip_twod + " --force-2D-limit" * self.force_twod_lim + " --summary-plot" * self.summary_plot,
         ]
+        if self.how in ["expected", "expected-bkg"]:
+            commands[0] += " --{}".format(self.how)
         run_list_of_commands(commands)
         self.send_notification_complete()
 
@@ -1563,6 +1676,15 @@ plot_smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimovbkg = PlotSMEFTScans(
     how="expected-bkg",
     skip_twod=False,
     submit_smeft_scans=["DeltaPhiJJ_NLO_Chb_HggHZZ_asimov", "DeltaPhiJJ_NLO_Chb_HggHZZ"],
+    force_twod_lim=True,
+)
+
+plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ = PlotSMEFTScans(
+    categories=["DeltaPhiJJHggHZZ"],
+    combination="DeltaPhiJJHggHZZ",
+    how="observed",
+    skip_twod=False,
+    submit_smeft_scans=["DeltaPhiJJ_LO_Chg_HggHZZ"],
     force_twod_lim=True,
 )
 
@@ -1709,7 +1831,8 @@ instances = {
     "SM_pt_HggHZZ": plot_sm_cross_section_pt_HggHZZ,
     "SM_pt_HggHZZHWWHttHbbVBFHttBoost_asimov_alone": plot_sm_cross_section_pt_HggHZZHWWHttHbbVBFHttBoost_asimov_alone,
     "SM_pt_HggHZZHWWHttHbbVBFHttBoost_asimov": plot_sm_cross_section_pt_HggHZZHWWHttHbbVBFHttBoost_asimov,
-    #"SM_pt_FinalComb": plot_sm_cross_section_pt_FinalComb,
+    "SM_pt_FinalComb": plot_sm_cross_section_pt_FinalComb,
+    "SM_pt_FinalComb_alone": plot_sm_cross_section_pt_FinalComb_alone,
     "SM_pt_FinalComb_asimov": plot_sm_cross_section_pt_FinalComb_asimov,
     "SM_pt_FinalComb_asimov_alone": plot_sm_cross_section_pt_FinalComb_asimov_alone,
     "SM_Njets_Hgg": plot_sm_cross_section_Njets_Hgg,
@@ -1738,11 +1861,17 @@ instances = {
     "SM_taucj_HggHZZ_asimov": plot_sm_cross_section_taucj_HggHZZ_asimov,
     "SM_taucj_HggHZZ_asimov_alone": plot_sm_cross_section_taucj_HggHZZ_asimov_alone,
     "kappa_YukawaConstrained_HggHZZHtt_asimov": plot_kappa_YukawaConstrained_HggHZZHtt_asimov,
+    "kappa_YukawaConstrained_HggHZZHtt": plot_kappa_YukawaConstrained_HggHZZHtt,
     "kappa_YukawaFloat_HggHZZHtt_asimov": plot_kappa_YukawaFloat_HggHZZHtt_asimov,
+    "kappa_YukawaFloat_HggHZZHtt": plot_kappa_YukawaFloat_HggHZZHtt,
     "kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov": plot_kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov,
+    "kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF": plot_kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF,
     "kappa_TopCgKtFloat_HggHZZHttHttBoostHbbVBF_asimov": plot_kappa_TopCgKtFloat_HggHZZHttHttBoostHbbVBF_asimov,
+    "kappa_TopCgKtFloat_HggHZZHttHttBoostHbbVBF": plot_kappa_TopCgKtFloat_HggHZZHttHttBoostHbbVBF,
     "kappa_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF_asimov": plot_kappa_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF_asimov,
+    "kappa_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF": plot_kappa_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF,
     "kappa_TopKbKtFloat_HggHZZHttHttBoostHbbVBF_asimov": plot_kappa_TopKbKtFloat_HggHZZHttHttBoostHbbVBF_asimov,
+    "kappa_TopKbKtFloat_HggHZZHttHttBoostHbbVBF": plot_kappa_TopKbKtFloat_HggHZZHttHttBoostHbbVBF,
     "smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimov": plot_smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimov,
     "smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimovbkg": plot_smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimovbkg,
     "smeft_DeltaPhiJJ_NLO_Chw_HggHZZ_asimov": plot_smeft_DeltaPhiJJ_NLO_Chw_HggHZZ_asimov,

@@ -1679,12 +1679,12 @@ plot_smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimovbkg = PlotSMEFTScans(
     force_twod_lim=True,
 )
 
-plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ = PlotSMEFTScans(
+plot_smeft_DeltaPhiJJ_NLO_Chb_HggHZZ = PlotSMEFTScans(
     categories=["DeltaPhiJJHggHZZ"],
     combination="DeltaPhiJJHggHZZ",
     how="observed",
     skip_twod=False,
-    submit_smeft_scans=["DeltaPhiJJ_LO_Chg_HggHZZ"],
+    submit_smeft_scans=["DeltaPhiJJ_NLO_Chb_HggHZZ"],
     force_twod_lim=True,
 )
 
@@ -1706,6 +1706,15 @@ plot_smeft_DeltaPhiJJ_NLO_Chw_HggHZZ_asimovbkg = PlotSMEFTScans(
     force_twod_lim=True,
 )
 
+plot_smeft_DeltaPhiJJ_NLO_Chw_HggHZZ = PlotSMEFTScans(
+    categories=["DeltaPhiJJHggHZZ"],
+    combination="DeltaPhiJJHggHZZ",
+    how="observed",
+    skip_twod=False,
+    submit_smeft_scans=["DeltaPhiJJ_NLO_Chw_HggHZZ"],
+    force_twod_lim=True,
+)
+
 plot_smeft_DeltaPhiJJ_NLO_Chwb_HggHZZ_asimov = PlotSMEFTScans(
     categories=["DeltaPhiJJHggHZZ"],
     combination="DeltaPhiJJHggHZZ",
@@ -1724,6 +1733,15 @@ plot_smeft_DeltaPhiJJ_NLO_Chwb_HggHZZ_asimovbkg = PlotSMEFTScans(
     force_twod_lim=True,
 )
 
+plot_smeft_DeltaPhiJJ_NLO_Chwb_HggHZZ = PlotSMEFTScans(
+    categories=["DeltaPhiJJHggHZZ"],
+    combination="DeltaPhiJJHggHZZ",
+    how="observed",
+    skip_twod=False,
+    submit_smeft_scans=["DeltaPhiJJ_NLO_Chwb_HggHZZ"],
+    force_twod_lim=True,
+)
+
 plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ_asimov = PlotSMEFTScans(
     categories=["DeltaPhiJJHggHZZ"],
     combination="DeltaPhiJJHggHZZ",
@@ -1739,6 +1757,15 @@ plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ_asimovbkg = PlotSMEFTScans(
     how="expected-bkg",
     skip_twod=False,
     submit_smeft_scans=["DeltaPhiJJ_LO_Chg_HggHZZ_asimov", "DeltaPhiJJ_LO_Chg_HggHZZ"],
+    force_twod_lim=True,
+)
+
+plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ = PlotSMEFTScans(
+    categories=["DeltaPhiJJHggHZZ"],
+    combination="DeltaPhiJJHggHZZ",
+    how="observed",
+    skip_twod=False,
+    submit_smeft_scans=["DeltaPhiJJ_LO_Chg_HggHZZ"],
     force_twod_lim=True,
 )
 
@@ -1872,12 +1899,16 @@ instances = {
     "kappa_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF": plot_kappa_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF,
     "kappa_TopKbKtFloat_HggHZZHttHttBoostHbbVBF_asimov": plot_kappa_TopKbKtFloat_HggHZZHttHttBoostHbbVBF_asimov,
     "kappa_TopKbKtFloat_HggHZZHttHttBoostHbbVBF": plot_kappa_TopKbKtFloat_HggHZZHttHttBoostHbbVBF,
+    "smeft_DeltaPhiJJ_NLO_Chb_HggHZZ": plot_smeft_DeltaPhiJJ_NLO_Chb_HggHZZ,
     "smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimov": plot_smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimov,
     "smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimovbkg": plot_smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimovbkg,
+    "smeft_DeltaPhiJJ_NLO_Chw_HggHZZ": plot_smeft_DeltaPhiJJ_NLO_Chw_HggHZZ,
     "smeft_DeltaPhiJJ_NLO_Chw_HggHZZ_asimov": plot_smeft_DeltaPhiJJ_NLO_Chw_HggHZZ_asimov,
     "smeft_DeltaPhiJJ_NLO_Chw_HggHZZ_asimovbkg": plot_smeft_DeltaPhiJJ_NLO_Chw_HggHZZ_asimovbkg,
+    "smeft_DeltaPhiJJ_NLO_Chwb_HggHZZ": plot_smeft_DeltaPhiJJ_NLO_Chwb_HggHZZ,
     "smeft_DeltaPhiJJ_NLO_Chwb_HggHZZ_asimov": plot_smeft_DeltaPhiJJ_NLO_Chwb_HggHZZ_asimov,
     "smeft_DeltaPhiJJ_NLO_Chwb_HggHZZ_asimovbkg": plot_smeft_DeltaPhiJJ_NLO_Chwb_HggHZZ_asimovbkg,
+    "smeft_DeltaPhiJJ_LO_Chg_HggHZZ": plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ,
     "smeft_DeltaPhiJJ_LO_Chg_HggHZZ_asimov": plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ_asimov,
     "smeft_DeltaPhiJJ_LO_Chg_HggHZZ_asimovbkg": plot_smeft_DeltaPhiJJ_LO_Chg_HggHZZ_asimovbkg,
     "smeft_pt_FullComb_NLO_Chb_asimov": plot_smeft_pt_FullComb_NLO_Chb_asimov,

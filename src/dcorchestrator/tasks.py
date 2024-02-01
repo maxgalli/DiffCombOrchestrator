@@ -489,6 +489,22 @@ class SubmitSMEFTScans(BaseNotifierClass):
         except AttributeError:
             self.global_fit_dir = None
 
+        self.commands = [
+            "submit_SMEFT_scans.py --chan-obs {} --category {} --input-dir {} --output-dir {} --base-model {} --submodel {} --force-output-name".format(
+                self.chan_obs_file,
+                self.category,
+                self.input_dir,
+                self.output_dir,
+                self.model_config_file,
+                self.submodel_config_file,
+            )
+            + " --skip-2d" * self.skip_twod
+            + " --global-fit-dir {}".format(self.global_fit_dir) * bool(self.global_fit_dir),
+        ]
+
+    def get_command_line(self):
+        return self.commands[0]
+
     def requires(self):
         return self.create_smeft_workspace
 
@@ -499,6 +515,7 @@ class SubmitSMEFTScans(BaseNotifierClass):
         """If there are log files in the output directory, jobs have been submitted.
         If there are not, then combine was run only locally
         """
+        print("Checking if complete: {}".format(self.get_command_line()))
         if not self.output().exists():
             return False
         if self.has_jobs:
@@ -517,19 +534,7 @@ class SubmitSMEFTScans(BaseNotifierClass):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
-        commands = [
-            "submit_SMEFT_scans.py --chan-obs {} --category {} --input-dir {} --output-dir {} --base-model {} --submodel {} --force-output-name".format(
-                self.chan_obs_file,
-                self.category,
-                self.input_dir,
-                self.output_dir,
-                self.model_config_file,
-                self.submodel_config_file,
-            )
-            + " --skip-2d" * self.skip_twod
-            + " --global-fit-dir {}".format(self.global_fit_dir) * bool(self.global_fit_dir),
-        ]
-        run_list_of_commands(commands)
+        run_list_of_commands(self.commands)
         if self.has_jobs:
             # wait 60 seconds for the jobs to be submitted
             time.sleep(60)

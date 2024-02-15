@@ -1224,7 +1224,7 @@ combine_cards_top_HggHZZHttHttBoostHbbVBF = CombineCards(
         "hgg=DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/TK_Top_out.txt",
         "hzz=DifferentialCombinationRun2/Analyses/Test/hzz_pth_ggH_Sep04_all.txt",
         "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_swapOOA_xHNuisPar.txt",
-        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/all_swapOOA.txt"
+        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/all_swapOOA.txt",
         "hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/signal-strength/testModel/model_combined_withpaths_noVBF.txt",
     ],
     output_card_name="CombinedCards/TK/Top_HggHZZHttHttBoostHbbVBF.txt",

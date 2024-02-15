@@ -88,7 +88,7 @@ submit_sm_scans_pt_Htt_asimov = SubmitSMScans(
 )
 
 create_sm_workspace_pt_HttBoost = CreateSMWorkspace(
-    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap/V2_Diff_dr0p5_hpt_2bin/hig-21-017_hpt_forComb.txt".format(
+    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/hig-21-017_hpt_forComb.txt".format(
         root_dir
     ),
     observable="smH_PTH",
@@ -108,7 +108,7 @@ submit_sm_scans_pt_HttBoost_asimov = SubmitSMScans(
 )
 
 create_sm_workspace_pt_HbbVBF = CreateSMWorkspace(
-    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-21-020/testModel/model_combined_withpaths.txt".format(root_dir),
+    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-21-020/signal-strength/testModel/model_combined_withpaths.txt".format(root_dir),
     observable="smH_PTH",
     category="HbbVBF",
 )
@@ -143,14 +143,26 @@ submit_sm_scans_pt_HggHZZ = SubmitSMScans(
     create_sm_workspace=create_sm_workspace_pt_HggHZZ,
 )
 
+combine_cards_sm_pt_HggHZZHWWHttHttBoost = CombineCards(
+    channels=[
+        "hgg=DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
+        "hzz=DifferentialCombinationRun2/Analyses/hig-21-009/pT4l/hzz4l_all_13TeV_xs_pT4l_bin_v3.txt",
+        "hww=DifferentialCombinationRun2/Analyses/hig-19-002/ptH_for_differential_combination/fullmodel_unreg.txt",
+        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_swapOOA.txt",
+        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/all_swapOOA.txt"
+    ],
+    output_card_name="CombinedCards/smH_PTH/HggHZZHWWHttHttBoost.txt",
+    replace_mass=True
+)
+
 combine_cards_sm_pt_HggHZZHWWHttHbbVBFHttBoost = CombineCards(
     channels=[
         "hgg=DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
         "hzz=DifferentialCombinationRun2/Analyses/hig-21-009/pT4l/hzz4l_all_13TeV_xs_pT4l_bin_v3.txt",
         "hww=DifferentialCombinationRun2/Analyses/hig-19-002/ptH_for_differential_combination/fullmodel_unreg.txt",
-        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg.txt",
-        "hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/testModel/model_combined_withpaths.txt",
-        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap/V2_Diff_dr0p5_hpt_2bin/hig-21-017_hpt.txt"
+        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_swapOOA.txt",
+        "hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/signal-strength/testModel/model_combined_withpaths_noVBF.txt",
+        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/all_swapOOA.txt"
     ],
     output_card_name="CombinedCards/smH_PTH/HggHZZHWWHttHbbVBFHttBoost.txt",
     replace_mass=True
@@ -161,12 +173,20 @@ combine_cards_sm_pt_FinalComb = CombineCards(
         "hgg=DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
         "hzz=DifferentialCombinationRun2/Analyses/hig-21-009/pT4l/hzz4l_all_13TeV_xs_pT4l_bin_v3.txt",
         "hww=DifferentialCombinationRun2/Analyses/hig-19-002/ptH_for_differential_combination/fullmodel_unreg.txt",
-        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg.txt",
-        "hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/testModel/model_combined_withpaths.txt",
-        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap/V2_Diff_dr0p5_hpt_2bin/hig-21-017_hpt.txt"
+        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_swapOOA.txt",
+        "hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/signal-strength/testModel/model_combined_withpaths_noVBF.txt",
+        #"hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/signal-strength/testModel/model_combined_withpaths.txt",
+        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/all_swapOOA.txt"
     ],
     output_card_name="CombinedCards/smH_PTH/FinalComb.txt",
     replace_mass=True
+)
+
+create_sm_workspace_pt_HggHZZHWWHttHttBoost = CreateSMWorkspace(
+    datacard_path="{}/CombinedCards/smH_PTH/HggHZZHWWHttHttBoost.txt".format(root_dir),
+    observable="smH_PTH",
+    category="HggHZZHWWHttHttBoost",
+    combine_cards=combine_cards_sm_pt_HggHZZHWWHttHttBoost,
 )
 
 create_sm_workspace_pt_HggHZZHWWHttHbbVBFHttBoost = CreateSMWorkspace(
@@ -181,6 +201,11 @@ create_sm_workspace_pt_FinalComb = CreateSMWorkspace(
     observable="smH_PTH",
     category="FinalComb",
     combine_cards=combine_cards_sm_pt_FinalComb,
+)
+
+submit_sm_scans_pt_HggHZZHWWHttHttBoost = SubmitSMScans(
+    category="HggHZZHWWHttHttBoost",
+    create_sm_workspace=create_sm_workspace_pt_HggHZZHWWHttHttBoost,
 )
 
 submit_sm_scans_pt_HggHZZHWWHttHbbVBFHttBoost = SubmitSMScans(
@@ -439,7 +464,7 @@ submit_sm_scans_ptj_HZZ_asimov = SubmitSMScans(
 )
 
 create_sm_workspace_ptj_HttBoost = CreateSMWorkspace(
-    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_LeadJetPt_NoOverLap/V1_diff_jpt_dr0p5/hig-21-017_jpt.txt".format(root_dir),
+    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_LeadJetPt_NoOverLap_New/Diff_V7_FreshRun_jpt_NoOverLap_rename/hig-21-017_jpt_forComb.txt".format(root_dir),
     observable="smH_PTJ0",
     category="HttBoost",
 )
@@ -460,7 +485,7 @@ combine_cards_sm_ptj_HggHZZHttBoost = CombineCards(
     channels=[
         "hgg=DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_Jet2p5Pt0/Datacard_13TeV_differential_Jet2p5Pt0.txt",
         "hzz=DifferentialCombinationRun2/Analyses/hig-21-009/pTj1/hzz4l_all_13TeV_xs_pTj1_bin_v3.txt",
-        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_LeadJetPt_NoOverLap/V1_diff_jpt_dr0p5/hig-21-017_jpt.txt",
+        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/all.txt",
     ],
     output_card_name="{}/CombinedCards/smH_PTJ0/HggHZZHttBoost.txt".format(root_dir),
     replace_mass=True
@@ -1183,35 +1208,64 @@ plot_sm_cross_section_taucj_HggHZZ_asimov_alone = PlotSMCrossSection(
 """
 kappa
 """
+combine_cards_yukawa_HggHZZHtt = CombineCards(
+    channels=[
+        "hgg=DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/TK_Yukawa_out.txt",
+        "hzz=DifferentialCombinationRun2/Analyses/Test/Yukawa_hzz_pth_ggH_Sep04_all_xHNuisPar.txt",
+        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_swapOOA_xHNuisPar.txt",
+    ],
+    output_card_name="CombinedCards/TK/Yukawa_HggHZZHtt.txt",
+    extra_options=" --xc=htt_PTH_120_200* --xc=htt_PTH_200_350* --xc=htt_PTH_350_450* --xc=htt_PTH_GT350* --xc=htt_PTH_GT450*",
+    replace_mass=False
+)
+
+combine_cards_top_HggHZZHttHttBoostHbbVBF = CombineCards(
+    channels=[
+        "hgg=DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/TK_Top_out.txt",
+        "hzz=DifferentialCombinationRun2/Analyses/Test/hzz_pth_ggH_Sep04_all.txt",
+        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_swapOOA_xHNuisPar.txt",
+        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/all_swapOOA.txt"
+        "hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/signal-strength/testModel/model_combined_withpaths_noVBF.txt",
+    ],
+    output_card_name="CombinedCards/TK/Top_HggHZZHttHttBoostHbbVBF.txt",
+    extra_options=" --xc=hzz_hzz_PTH_GT600*",
+    replace_mass=True
+)
 
 create_kappa_workspace_YukawaConstrained_HggHZZHtt = CreateKappaWorkspace(
     model="YukawaConstrained",
     category="HggHZZHtt",
+    combine_cards=combine_cards_yukawa_HggHZZHtt,
 )
 
 create_kappa_workspace_YukawaFloat_HggHZZHtt = CreateKappaWorkspace(
     model="YukawaFloat",
     category="HggHZZHtt",
+    combine_cards=combine_cards_yukawa_HggHZZHtt,
 )
 
 create_kappa_workspace_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF = CreateKappaWorkspace(
     model="TopCgKtConstrained",
     category="HggHZZHttHttBoostHbbVBF",
+    combine_cards=combine_cards_top_HggHZZHttHttBoostHbbVBF,
 )
 
 create_kappa_workspace_TopCgKtFloat_HggHZZHttHttBoostHbbVBF = CreateKappaWorkspace(
     model="TopCgKtFloat",
     category="HggHZZHttHttBoostHbbVBF",
+    combine_cards=combine_cards_top_HggHZZHttHttBoostHbbVBF,
 )
 
 create_kappa_workspace_TopKbKtConstrained_HggHZZHttHttBoostHbbVBF = CreateKappaWorkspace(
     model="TopKbKtConstrained",
     category="HggHZZHttHttBoostHbbVBF",
+    combine_cards=combine_cards_top_HggHZZHttHttBoostHbbVBF,
 )
 
 create_kappa_workspace_TopKbKtFloat_HggHZZHttHttBoostHbbVBF = CreateKappaWorkspace(
     model="TopKbKtFloat",
     category="HggHZZHttHttBoostHbbVBF",
+    combine_cards=combine_cards_top_HggHZZHttHttBoostHbbVBF,
 )
 
 submit_kappa_scan_YukawaConstrained_HggHZZHtt_asimov = SubmitKappaScans(
@@ -1380,7 +1434,7 @@ plot_kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF_asimov = PlotKappaLimits(
 plot_kappa_TopCgKtConstrained_HggHZZHttHttBoostHbbVBF = PlotKappaLimits(
     categories=["HggHZZHttHttBoostHbbVBF"],
     combination="HggHZZHttHttBoostHbbVBF",
-    asimov=True,
+    asimov=False,
     submit_kappa_scans=["TopCgKtConstrained_HggHZZHttHttBoostHbbVBF"],
 )
 
@@ -1394,7 +1448,7 @@ plot_kappa_TopCgKtFloat_HggHZZHttHttBoostHbbVBF_asimov = PlotKappaLimits(
 plot_kappa_TopCgKtFloat_HggHZZHttHttBoostHbbVBF = PlotKappaLimits(
     categories=["HggHZZHttHttBoostHbbVBF"],
     combination="HggHZZHttHttBoostHbbVBF",
-    asimov=True,
+    asimov=False,
     submit_kappa_scans=["TopCgKtFloat_HggHZZHttHttBoostHbbVBF"],
 )
 
@@ -1506,9 +1560,9 @@ combine_cards_smeft_pt_HggHZZHWWHttHbbVBFHttBoost = CombineCards(
         "hgg=DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
         "hzz=DifferentialCombinationRun2/Analyses/hig-21-009/pT4l/hzz4l_all_13TeV_xs_pT4l_bin_v3.txt",
         "hww=DifferentialCombinationRun2/Analyses/hig-19-002/ptH_for_differential_combination/fullmodel_unreg.txt",
-        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg.txt",
-        "hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/testModel/model_combined_withpaths.txt",
-        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap/V2_Diff_dr0p5_hpt_2bin/hig-21-017_hpt.txt"
+        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_swapOOA.txt",
+        "hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/signal-strength/testModel/model_combined_withpaths_noVBF.txt",
+        "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/all_swapOOA.txt"
     ],
     output_card_name="CombinedCards/smH_PTH/HggHZZHWWHttHbbVBFHttBoost_smeft.txt",
     replace_mass=True

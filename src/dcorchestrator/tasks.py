@@ -93,6 +93,7 @@ def change_ooa_number_in_card(card):
 class CombineCards(BaseNotifierClass):
     channels = luigi.ListParameter()
     output_card_name = luigi.Parameter()
+    extra_options = luigi.OptionalParameter(default="")
     replace_mass = luigi.BoolParameter(default=False)
 
     def output(self):
@@ -105,6 +106,7 @@ class CombineCards(BaseNotifierClass):
             os.makedirs(output_dir)
         commands = [
             "combineCards.py {}".format(" ".join(self.channels))
+            + self.extra_options
             + " > {}".format(self.output_card_name)
         ]
         to_further_append = """
@@ -303,12 +305,19 @@ class SubmitSMScans(BaseNotifierClass):
 class CreateKappaWorkspace(luigi.Task):
     model = luigi.Parameter()
     category = luigi.Parameter()
+    combine_cards = luigi.OptionalParameter(default=None)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.model_arg = kappa_naming_conv[self.model]
         self.input_dir="{}/CombinedCards/TK".format(root_dir)
         self.output_dir="{}/CombinedWorkspaces/TK".format(root_dir)
+
+    def requires(self):
+        if self.combine_cards is not None:
+            return self.combine_cards
+        else:
+            return []
 
     def output(self):
         return luigi.LocalTarget(

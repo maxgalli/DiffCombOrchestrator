@@ -1654,6 +1654,12 @@ submit_smeft_scans_pt_FullComb_PCA_asimov_statonly = SubmitSMEFTScans(
     full_stat_task=submit_smeft_scans_pt_FullComb_PCA_asimov,
 )
 
+submit_smeft_scans_pt_FullComb_PCA = SubmitSMEFTScans(
+    category="observed",
+    skip_twod=True,
+    create_smeft_workspace=create_smeft_workspace_pt_PCA_FullComb,
+)
+
 submit_instances_smeft = {
     "DeltaPhiJJ_NLO_Chb_HggHZZ_asimov": submit_smeft_scans_DeltaPhiJJ_NLO_Chb_HggHZZ_asimov,
     "DeltaPhiJJ_NLO_Chb_HggHZZ": submit_smeft_scans_DeltaPhiJJ_NLO_Chb_HggHZZ,
@@ -1673,6 +1679,7 @@ submit_instances_smeft = {
     "pt_FullComb_LO_Chg": submit_smeft_scans_pt_FullComb_LO_Chg,
     "pt_FullComb_PCA_asimov": submit_smeft_scans_pt_FullComb_PCA_asimov,
     "pt_FullComb_PCA_asimov_statonly": submit_smeft_scans_pt_FullComb_PCA_asimov_statonly,
+    "pt_FullComb_PCA": submit_smeft_scans_pt_FullComb_PCA,
 }
 
 class PlotSMEFTScans(BaseNotifierClass):
@@ -1711,7 +1718,7 @@ class PlotSMEFTScans(BaseNotifierClass):
             ) + " --skip-2d" * self.skip_twod + " --force-2D-limit" * self.force_twod_lim + " --summary-plot" * self.summary_plot,
         ]
         if self.how in ["expected", "expected-bkg"]:
-            commands[0] += " --{}".format(self.how)
+            commands[2] += " --{}".format(self.how)
         run_list_of_commands(commands)
         self.send_notification_complete()
 
@@ -1941,6 +1948,16 @@ plot_smeft_pt_FullComb_PCA_asimov = PlotSMEFTScans(
     force_twod_lim=False,
 )
 
+plot_smeft_pt_FullComb_PCA = PlotSMEFTScans(
+    categories=["PtFullComb"],
+    combination="PtFullComb",
+    how="observed",
+    skip_twod=True,
+    submit_smeft_scans=["pt_FullComb_PCA"],
+    summary_plot=True,
+    force_twod_lim=False,
+)
+
 instances = {
     "SM_pt_Hgg": plot_sm_cross_section_pt_Hgg,
     "SM_pt_HWW": plot_sm_cross_section_pt_HWW,
@@ -2014,4 +2031,5 @@ instances = {
     "smeft_pt_FullComb_LO_Chg_asimov": plot_smeft_pt_FullComb_LO_Chg_asimov,
     "smeft_pt_FullComb_LO_Chg_asimovbkg": plot_smeft_pt_FullComb_LO_Chg_asimovbkg,
     "smeft_pt_FullComb_PCA_asimov": plot_smeft_pt_FullComb_PCA_asimov,
+    "smeft_pt_FullComb_PCA": plot_smeft_pt_FullComb_PCA,
 }

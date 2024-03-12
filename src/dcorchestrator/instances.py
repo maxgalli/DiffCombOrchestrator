@@ -1744,7 +1744,8 @@ submit_smeft_scans_DeltaPhiJJ_LO_Chg_HggHZZ = SubmitSMEFTScans(
 
 combine_cards_smeft_pt_HggHZZHWWHttHbbVBFHttBoost = CombineCards(
     channels=[
-        "hgg=DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
+        #"hgg=DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
+        "hgg=DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
         "hzz=DifferentialCombinationRun2/Analyses/hig-21-009/pT4l/hzz4l_all_13TeV_xs_pT4l_bin_v3.txt",
         "hww=DifferentialCombinationRun2/Analyses/hig-19-002/ptH_for_differential_combination/fullmodel_unreg.txt",
         "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_swapOOA.txt",
@@ -1752,6 +1753,17 @@ combine_cards_smeft_pt_HggHZZHWWHttHbbVBFHttBoost = CombineCards(
         "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/all_swapOOA.txt"
     ],
     output_card_name="CombinedCards/smH_PTH/HggHZZHWWHttHbbVBFHttBoost_smeft.txt",
+    replace_mass=True
+)
+
+combine_cards_smeft_pt_HggHZZHWW = CombineCards(
+    channels=[
+        #"hgg=DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
+        "hgg=DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt",
+        "hzz=DifferentialCombinationRun2/Analyses/hig-21-009/pT4l/hzz4l_all_13TeV_xs_pT4l_bin_v3.txt",
+        "hww=DifferentialCombinationRun2/Analyses/hig-19-002/ptH_for_differential_combination/fullmodel_unreg.txt",
+    ],
+    output_card_name="CombinedCards/smH_PTH/HggHZZHWW_smeft.txt",
     replace_mass=True
 )
 
@@ -1807,8 +1819,17 @@ create_smeft_workspace_pt_LO_FullComb = CreateSMEFTWorkspace(
     combine_cards=combine_cards_smeft_pt_HggHZZHWWHttHbbVBFHttBoost,
 )
 
+create_smeft_workspace_pt_LO_HggHZZHWW = CreateSMEFTWorkspace(
+    datacard="{}/CombinedCards/smH_PTH/HggHZZHWW_smeft.txt".format(root_dir),
+    model="220926Atlas",
+    equations="CMS-ForDiffAllSMEFTsim-230530-FullDecay",
+    chan_obs="PtHggHZZHWW",
+    combine_cards=combine_cards_smeft_pt_HggHZZHWW,
+)
+
 create_smeft_workspace_pt_LO_FullComb_Hgg = CreateSMEFTWorkspace(
-    datacard="{}/DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt".format(root_dir),
+    #datacard="{}/DifferentialCombinationRun2/Analyses/hig-19-016/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt".format(root_dir),
+    datacard="{}/DifferentialCombinationRun2/Analyses/hig-19-016-noprune/outdir_differential_Pt/Datacard_13TeV_differential_Pt.txt".format(root_dir),
     model="220926Atlas",
     equations="CMS-ForDiffAllSMEFTsim-230530-FullDecay",
     chan_obs="PtHgg",

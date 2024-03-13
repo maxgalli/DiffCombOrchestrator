@@ -96,15 +96,8 @@ class CombineCards(BaseNotifierClass):
     extra_options = luigi.OptionalParameter(default="")
     replace_mass = luigi.BoolParameter(default=False)
 
-    def output(self):
-        return luigi.LocalTarget(self.output_card_name)
-
-    def run(self):
-        # create directory if it does not exist
-        output_dir = "/".join(self.output_card_name.split("/")[:-1])
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        commands = [
+    def make_commands(self):
+        self.commands = [
             "combineCards.py {}".format(" ".join(self.channels))
             + self.extra_options
             + " > {}".format(self.output_card_name)
@@ -174,13 +167,23 @@ nuisance edit rename * httboost.* CMS_scale_met_unclustered2018 CMS_scale_met_un
 nuisance edit rename * hgg.* CMS_res_j_16 CMS_res_j_2016 ifexists
 nuisance edit rename * hgg.* CMS_res_j_17 CMS_res_j_2017 ifexists
 """
-        commands.append("echo '{}' >> {}".format(to_further_append, self.output_card_name))
+        self.commands.append("echo '{}' >> {}".format(to_further_append, self.output_card_name))
         if "HttBoost" in self.output_card_name:
-            commands.append("echo '{}' >> {}".format(to_further_append_systematics_httboost, self.output_card_name))
+            self.commands.append("echo '{}' >> {}".format(to_further_append_systematics_httboost, self.output_card_name))
         if "Hgg" in self.output_card_name:
-            commands.append("echo '{}' >> {}".format(to_further_append_systematics_hgg, self.output_card_name))
+            self.commands.append("echo '{}' >> {}".format(to_further_append_systematics_hgg, self.output_card_name))
+
+    def output(self):
+        return luigi.LocalTarget(self.output_card_name)
+
+    def run(self):
+        # create directory if it does not exist
+        output_dir = "/".join(self.output_card_name.split("/")[:-1])
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
         
-        run_list_of_commands(commands)
+        self.make_commands()
+        run_list_of_commands(self.commands)
 
         if self.replace_mass:
             replace_mass_in_card(self.output_card_name)
@@ -200,6 +203,13 @@ class CreateSMWorkspace(BaseNotifierClass):
         super().__init__(*args, **kwargs)
         self.output_dir = "{}/CombinedWorkspaces".format(root_dir)
 
+    def make_commands(self):
+        self.commands = [
+            "produce_workspace.py --datacard {} --observable {} --category {} --output-dir {} --model SM".format(
+                self.datacard_path, self.observable, self.category, self.output_dir
+            )
+        ]
+
     def requires(self):
         if self.combine_cards is not None:
             return self.combine_cards
@@ -212,13 +222,10 @@ class CreateSMWorkspace(BaseNotifierClass):
         )
 
     def run(self):
-        commands = [
-            "produce_workspace.py --datacard {} --observable {} --category {} --output-dir {} --model SM".format(
-                self.datacard_path, self.observable, self.category, self.output_dir
-            )
-        ]
-        run_list_of_commands(commands)
+        self.make_commands()
+        run_list_of_commands(self.commands)
         self.send_notification_complete()
+
 
 class AlwaysCompleteTask(luigi.Task):
     def run(self):
@@ -247,6 +254,17 @@ class SubmitSMScans(BaseNotifierClass):
             self.global_fit_file = "{}/{}".format(
                 self.full_stat_task.full_output_dir, self.global_fit_file
             )
+
+    def make_commands(self):
+        self.commands = [
+            "submit_scans.py --model SM --observable {} --category {} --input-dir {}/SM/{} --output-dir {} --force-output-name".format(
+                self.observable,
+                self.category,
+                self.input_dir,
+                self.observable,
+                self.full_output_dir,
+            ) + " --global-fit-file {}".format(self.global_fit_file) * bool(self.global_fit_file),
+        ]
 
     def requires(self):
         requirements = [self.create_sm_workspace]
@@ -280,17 +298,10 @@ class SubmitSMScans(BaseNotifierClass):
         # create output directory if it doesn't exist
         if not os.path.exists(self.full_output_dir):
             os.makedirs(self.full_output_dir)
-        commands = [
-            "submit_scans.py --model SM --observable {} --category {} --input-dir {}/SM/{} --output-dir {} --force-output-name".format(
-                self.observable,
-                self.category,
-                self.input_dir,
-                self.observable,
-                self.full_output_dir,
-            ) + " --global-fit-file {}".format(self.global_fit_file) * bool(self.global_fit_file),
-        ]
-        print("Running commands: {}".format(commands))
-        run_list_of_commands(commands)
+
+        self.make_commands()
+        print("Running commands: {}".format(self.commands))
+        run_list_of_commands(self.commands)
         if self.has_jobs:
             # wait 60 seconds for the jobs to be submitted
             time.sleep(60)
@@ -302,7 +313,7 @@ class SubmitSMScans(BaseNotifierClass):
         self.send_notification_complete()
 
 
-class CreateKappaWorkspace(luigi.Task):
+class CreateKappaWorkspace(BaseNotifierClass):
     model = luigi.Parameter()
     category = luigi.Parameter()
     combine_cards = luigi.OptionalParameter(default=None)
@@ -312,6 +323,13 @@ class CreateKappaWorkspace(luigi.Task):
         self.model_arg = kappa_naming_conv[self.model]
         self.input_dir="{}/CombinedCards/TK".format(root_dir)
         self.output_dir="{}/CombinedWorkspaces/TK".format(root_dir)
+        
+    def make_commands(self):
+        self.commands = [
+            "produce_TK_workspace.py --model {} --category {} --input-dir {} --output-dir {}".format(
+                self.model_arg, self.category, self.input_dir, self.output_dir
+            )
+        ]
 
     def requires(self):
         if self.combine_cards is not None:
@@ -325,12 +343,8 @@ class CreateKappaWorkspace(luigi.Task):
         )
 
     def run(self):
-        commands = [
-            "produce_TK_workspace.py --model {} --category {} --input-dir {} --output-dir {}".format(
-                self.model_arg, self.category, self.input_dir, self.output_dir
-            )
-        ]
-        run_list_of_commands(commands)
+        self.make_commands()
+        run_list_of_commands(self.commands)
 
 
 class SubmitKappaScans(BaseNotifierClass):
@@ -346,6 +360,16 @@ class SubmitKappaScans(BaseNotifierClass):
         self.full_output_dir = create_full_dir_name(
             self.output_dir, self.create_kappa_workspace.model_arg, self.category
         )
+
+    def make_commands(self):
+        self.commands = [
+            "submit_TK_scans.py --model {} --category {} --input-dir {} --output-dir {} --force-output-name".format(
+                self.create_kappa_workspace.model_arg,
+                self.category,
+                self.input_dir,
+                self.full_output_dir,
+            ),
+        ]
 
     def requires(self):
         return self.create_kappa_workspace
@@ -373,15 +397,9 @@ class SubmitKappaScans(BaseNotifierClass):
             return self.output().exists()
 
     def run(self):
-        commands = [
-            "submit_TK_scans.py --model {} --category {} --input-dir {} --output-dir {} --force-output-name".format(
-                self.create_kappa_workspace.model_arg,
-                self.category,
-                self.input_dir,
-                self.full_output_dir,
-            ),
-        ]
-        run_list_of_commands(commands)
+        self.make_commands()
+        run_list_of_commands(self.commands)
+
         if self.has_jobs:
             # wait 60 seconds for the jobs to be submitted
             time.sleep(60)
@@ -420,6 +438,18 @@ class CreateSMEFTWorkspace(BaseNotifierClass):
             root_dir, self.equations
         )
 
+    def make_commands(self):
+        self.commands = [
+            "produce_SMEFT_workspace.py --datacard {} --config-file {} --equations-dir {} --chan-obs {} --output-dir {}".format(
+                self.datacard,
+                self.config_file,
+                self.equations_dir,
+                self.chan_obs_file,
+                self.output_dir_to_pass,
+            )
+            + " --linearised" * self.linearised
+        ]
+
     def requires(self):
         if self.combine_cards is not None:
             return self.combine_cards
@@ -437,17 +467,8 @@ class CreateSMEFTWorkspace(BaseNotifierClass):
         if not os.path.exists(self.output_dir_to_pass):
             os.makedirs(self.output_dir_to_pass)
 
-        commands = [
-            "produce_SMEFT_workspace.py --datacard {} --config-file {} --equations-dir {} --chan-obs {} --output-dir {}".format(
-                self.datacard,
-                self.config_file,
-                self.equations_dir,
-                self.chan_obs_file,
-                self.output_dir_to_pass,
-            )
-            + " --linearised" * self.linearised
-        ]
-        run_list_of_commands(commands)
+        self.make_commands()
+        run_list_of_commands(self.commands)
         self.send_notification_complete()
 
 
@@ -498,6 +519,7 @@ class SubmitSMEFTScans(BaseNotifierClass):
         except AttributeError:
             self.global_fit_dir = None
 
+    def make_commands(self):
         self.commands = [
             "submit_SMEFT_scans.py --chan-obs {} --category {} --input-dir {} --output-dir {} --base-model {} --submodel {} --force-output-name".format(
                 self.chan_obs_file,
@@ -510,9 +532,6 @@ class SubmitSMEFTScans(BaseNotifierClass):
             + " --skip-2d" * self.skip_twod
             + " --global-fit-dir {}".format(self.global_fit_dir) * bool(self.global_fit_dir),
         ]
-
-    def get_command_line(self):
-        return self.commands[0]
 
     def requires(self):
         return self.create_smeft_workspace
@@ -543,6 +562,7 @@ class SubmitSMEFTScans(BaseNotifierClass):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
+        self.make_commands()
         run_list_of_commands(self.commands)
         if self.has_jobs:
             # wait 60 seconds for the jobs to be submitted

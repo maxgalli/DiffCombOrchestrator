@@ -108,3 +108,13 @@ class BaseNotifierClass(luigi.Task):
             print("Notification sent successfully")
         else:
             print("Failed to send notification") 
+
+    def make_commands(self):
+        raise NotImplementedError
+
+    def get_command_line(self):
+        try:
+            return "\n".join(self.commands)
+        except AttributeError:
+            self.make_commands()
+            return "\n".join(self.commands)

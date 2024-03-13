@@ -881,16 +881,9 @@ class PlotSMCrossSection(BaseNotifierClass):
             root_dir,
             self.observable,
         )
-
-    def requires(self):
-        required_tasks = []
-        for submit_sm_scan in self.submit_sm_scans:
-            required_tasks.append(submit_instances[submit_sm_scan])
-        return required_tasks
-
-    def run(self):
-        os.environ["KRB5CCNAME"] = "/t3home/gallim/krb5cc_722"
-        commands = [
+    
+    def make_commands(self):
+        self.commands = [
             "kinit -R",
             "eosfusebind -g krb5 $HOME/krb5cc_$UID",
             "plot_xs_scans.py --observable {} --input-dir {} --metadata-dir {} --output-dir {} --config-file {}".format(
@@ -901,12 +894,21 @@ class PlotSMCrossSection(BaseNotifierClass):
                 self.config_file,
             )
         ]
-        commands[2] += " --categories {}".format(" ".join(self.categories)) if self.categories else ""
-        commands[2] += " --singles {}".format(" ".join(self.singles)) if self.singles else ""
-        commands[2] += " --systematic-bands {}".format(self.systematic_bands) if self.systematic_bands is not None else ""
-        commands[2] += " --allow-extrapolation" if self.allow_extrapolation else ""
+        self.commands[2] += " --categories {}".format(" ".join(self.categories)) if self.categories else ""
+        self.commands[2] += " --singles {}".format(" ".join(self.singles)) if self.singles else ""
+        self.commands[2] += " --systematic-bands {}".format(self.systematic_bands) if self.systematic_bands is not None else ""
+        self.commands[2] += " --allow-extrapolation" if self.allow_extrapolation else ""
 
-        run_list_of_commands(commands)
+    def requires(self):
+        required_tasks = []
+        for submit_sm_scan in self.submit_sm_scans:
+            required_tasks.append(submit_instances[submit_sm_scan])
+        return required_tasks
+
+    def run(self):
+        os.environ["KRB5CCNAME"] = "/t3home/gallim/krb5cc_722"
+        self.make_commands()
+        run_list_of_commands(self.commands)
         self.send_notification_complete()
 
 
@@ -1501,21 +1503,13 @@ class PlotKappaLimits(BaseNotifierClass):
         self.input_dir = "{}/outputs/TK_scans".format(root_dir)
         self.output_dir = "{}/outputs/TK_plots/{}".format(root_dir, self.model)
 
-    def requires(self):
-        return [submit_instances_kappa[scan] for scan in self.submit_kappa_scans]
-
-    def run(self):
+    def make_commands(self):
         full_input_dir = os.path.join(
             self.input_dir,
             submit_instances_kappa[
                 self.submit_kappa_scans[0]
             ].create_kappa_workspace.model_arg,
         )
-        # create output directory if it doesn't exist
-        if not os.path.exists(self.output_dir):
-            print("Creating output directory: {}".format(self.output_dir))
-            os.makedirs(self.output_dir)
-        
         kappa_naming_conv_plot = {
             "YukawaConstrained": "yukawa_coupdep",
             "YukawaFloat": "yukawa_floatingBR",
@@ -1524,8 +1518,8 @@ class PlotKappaLimits(BaseNotifierClass):
             "TopKbKtConstrained": "top_coupdep_ctcb",
             "TopKbKtFloat": "top_floatingBR_ctcb",
         }
-        os.environ["KRB5CCNAME"] = "/t3home/gallim/krb5cc_722"
-        commands = [
+
+        self.commands = [
             "kinit -R",
             "eosfusebind -g krb5 $HOME/krb5cc_$UID",
             "plot_TK_scans.py --input-dir {} --output-dir {} --model {} --categories {} --combination {}".format(
@@ -1537,7 +1531,19 @@ class PlotKappaLimits(BaseNotifierClass):
             )
             + (" --expected" if self.asimov else ""),
         ]
-        run_list_of_commands(commands)
+
+    def requires(self):
+        return [submit_instances_kappa[scan] for scan in self.submit_kappa_scans]
+
+    def run(self):
+        # create output directory if it doesn't exist
+        if not os.path.exists(self.output_dir):
+            print("Creating output directory: {}".format(self.output_dir))
+            os.makedirs(self.output_dir)
+        
+        os.environ["KRB5CCNAME"] = "/t3home/gallim/krb5cc_722"
+        self.make_commands()
+        run_list_of_commands(self.commands)
         self.send_notification_complete()
 
 
@@ -1921,12 +1927,8 @@ class PlotSMEFTScans(BaseNotifierClass):
         self.submodel_config_file = submit_instances_smeft[self.submit_smeft_scans[0]].submodel_config_file
         self.cuts_file = "{}/DifferentialCombinationRun2/metadata/SMEFT/plot_config.yml".format(root_dir)
 
-    def requires(self):
-        return [submit_instances_smeft[scan] for scan in self.submit_smeft_scans]
-    
-    def run(self):
-        os.environ["KRB5CCNAME"] = "/t3home/gallim/krb5cc_722"
-        commands = [
+    def make_commands(self):
+        self.commands = [
             "kinit -R",
             "eosfusebind -g krb5 $HOME/krb5cc_$UID",
             "plot_SMEFT_scans.py --how submodel --input-dir {} --output-dir {} --model {} --submodel {} --categories {} --combination {} --config-file {}".format(
@@ -1940,8 +1942,15 @@ class PlotSMEFTScans(BaseNotifierClass):
             ) + " --skip-2d" * self.skip_twod + " --force-2D-limit" * self.force_twod_lim + " --summary-plot" * self.summary_plot,
         ]
         if self.how in ["expected", "expected-bkg"]:
-            commands[2] += " --{}".format(self.how)
-        run_list_of_commands(commands)
+            self.commands[2] += " --{}".format(self.how)
+
+    def requires(self):
+        return [submit_instances_smeft[scan] for scan in self.submit_smeft_scans]
+    
+    def run(self):
+        os.environ["KRB5CCNAME"] = "/t3home/gallim/krb5cc_722"
+        self.make_commands()
+        run_list_of_commands(self.commands)
         self.send_notification_complete()
 
 plot_smeft_DeltaPhiJJ_NLO_Chb_HggHZZ_asimov = PlotSMEFTScans(

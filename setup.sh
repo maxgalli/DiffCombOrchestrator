@@ -116,3 +116,5 @@ else
     # Create a file to mark that the software has been built
     touch .built.txt
 fi
+
+source /cvmfs/cms.cern.ch/crab3/crab.sh

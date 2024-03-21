@@ -7,6 +7,9 @@ EFTScalingEquations
 .built.txt
 install_dir
 outputs
+outputs*
+*.log
+tries
 
 # Python
 *.py[cod]

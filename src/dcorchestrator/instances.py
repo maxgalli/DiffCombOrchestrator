@@ -70,7 +70,8 @@ submit_sm_scans_pt_HWW_asimov = SubmitSMScans(
 )
 
 create_sm_workspace_pt_Htt = CreateSMWorkspace(
-    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg.txt".format(
+    #datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg.txt".format(
+    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_lnNrecoil.txt".format(
         root_dir
     ),
     observable="smH_PTH",
@@ -175,7 +176,7 @@ combine_cards_sm_pt_FinalComb = CombineCards(
         "hzz=DifferentialCombinationRun2/Analyses/hig-21-009/pT4l/hzz4l_all_13TeV_xs_pT4l_bin_v3.txt",
         "hww=DifferentialCombinationRun2/Analyses/hig-19-002/ptH_for_differential_combination/fullmodel_unreg.txt",
         #"htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_swapOOA.txt",
-        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_lnNrecoil_swapOOA_xHNuisPar.txt",
+        "htt=DifferentialCombinationRun2/Analyses/hig-20-015/HiggsPt/HTT_Run2FinalCard_HiggsPt_NoReg_lnNrecoil_swapOOA.txt",
         "hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/signal-strength/testModel/model_combined_withpaths_noVBF.txt",
         #"hbbvbf=DifferentialCombinationRun2/Analyses/hig-21-020/signal-strength/testModel/model_combined_withpaths.txt",
         "httboost=DifferentialCombinationRun2/Analyses/hig-21-017/BoostedHTT_DiffXS_HiggsPt_NoOverLap_New/Diff_V7_FreshRun_hpt_NoOverLap_rename/all_swapOOA.txt"
@@ -302,7 +303,7 @@ submit_sm_scans_Njets_HWW_asimov = SubmitSMScans(
 )
 
 create_sm_workspace_Njets_Htt = CreateSMWorkspace(
-    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-20-015/NJets/HTT_Run2FinalCard_NJets_AddedReg.txt".format(root_dir),
+    datacard_path="{}/DifferentialCombinationRun2/Analyses/hig-20-015/NJets/HTT_Run2FinalCard_NJets_Reg.txt".format(root_dir),
     observable="Njets",
     category="Htt",
 )

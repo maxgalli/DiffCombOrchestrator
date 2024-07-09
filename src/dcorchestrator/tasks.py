@@ -2,6 +2,9 @@ import luigi
 import time
 from tqdm import tqdm
 import os
+import pickle as pkl
+import yaml
+from yaml import Loader, Dumper
 
 from .utils import (
     run_list_of_commands,
@@ -90,11 +93,155 @@ def change_ooa_number_in_card(card):
             f.writelines(lines)
 
 
+def add_acceptance_unc_to_card(card, obs):
+    conversion = {
+        "smH_PTH": "pt",
+        "Njets": "njet",
+        "yH": "y",
+        "smH_PTJ0": "ptj1",
+        "DEtajj": "detajj",
+        "mjj": "mjj",
+        "TauCJ": "taujc"
+    }
+    conversion_chan = {
+        "hgg": "Hgg",
+        "hzz": "HZZ",
+        "hww": "HWW",
+        "htt": "Htt",
+        "httboost": "HttBoost"
+    }
+    known_conversions = {
+        "smH_PTH": {
+            "0_15": "0_30",
+            "15_30": "0_30",
+            "450_10000": "GT450",
+            "PTH_GT200": "GT200",
+            "200_350": "GT200",
+            "PTH_GT350": "GT200",
+            "PTH_GT450": "GT450",
+            "PTH_GT600": "GT600",
+        }, 
+        "Njets": {
+            "NJ_GE4": "4",
+            "4_14": "4",
+        },
+        "smH_PTJ0": {
+            "m1000_30": "0_30",
+            "200_10000": "GT200",
+            "m2_30": "0_30",    
+        },
+        "TauCJ": {
+            "80_1000": "GT80",
+            "80_10000": "GT80",
+        },
+        "mjj": {
+            "1000_13000": "GT1000",
+        }
+    }
+    tmpl_path = "/work/gallim/DifferentialCombination_home/DiffCombOrchestrator/reviews/240429_ARC/theoretical_uncs/scales_{}.pkl"
+    tmpl_pois = "/work/gallim/DifferentialCombination_home/DiffCombOrchestrator/DifferentialCombinationRun2/metadata/xs_POIs/SM/{}/{}.yml"
+    with open(card, "r") as f:
+        lines = f.readlines()
+    # bins line is the second one starting with bin
+    bins_line = [line for line in lines if line.startswith("bin")][1]
+    bins = bins_line.split()[1:]
+    process_lines = [line for line in lines if line.startswith("process")][0]
+    processes = process_lines.split()[1:]
+    dct = {}
+    for chan in conversion_chan:
+        with open(tmpl_path.format(conversion_chan[chan]), "rb") as f:
+            scales = pkl.load(f)
+        try:
+            dct[chan] = scales[conversion[obs]]
+        except KeyError:
+            print("Observable {} not found in the dictionary for channel {}".format(obs, chan))
+    new_dct = {}
+    for scale in ["mu_F", "mu_R"]:
+        new_dct[scale] = {}
+        for chan in dct:
+            new_dct[scale][chan] = {}
+            with open(tmpl_pois.format(obs, conversion_chan[chan]), "r") as f:
+                pois = yaml.load(f, Loader=Loader)
+                # remove "r_" from the pois
+                pois = [p.replace("r_{}_".format(obs), "") for p in pois]
+            up_vector = dct[chan][scale]["up"]
+            down_vector = dct[chan][scale]["down"]
+            for i, bin in enumerate(pois):
+                # In all httboosted there is a first bin in the histogram which is not in the pois
+                if chan == "httboost":
+                    i = i + 1
+                # in DEtajj, mjj, TauCJ the first bin is "out"
+                if obs in ["DEtajj", "mjj", "TauCJ"]:
+                    i -= 1
+                if i < 0:
+                    continue
+                new_dct[scale][chan][bin] = {
+                    "up": up_vector[i],
+                    "down": down_vector[i]
+                }
+    #print(new_dct)
+    new_acc_lines = []
+    for scale in ["mu_F", "mu_R"]:
+        line = "ggH_{} lnN ".format(scale)
+        for bin, process in zip(bins, processes):
+            # channel is the first word in bin
+            chan = bin.split("_")[0]
+            # if the process name starts with smH or ggH, it is a signal process
+            if process.startswith("smH") or process.startswith("ggH"):
+                # get the last paert of the name something_somthing
+                process = "_".join([process.split("_")[-2], process.split("_")[-1]]) 
+                # first, look check if it is present in the new_dct
+                try:
+                    up = new_dct[scale][chan][process]["up"]
+                    down = new_dct[scale][chan][process]["down"]
+                    line += "{}/{} ".format(up, down)
+                except KeyError:
+                    try:
+                        process = process.replace("p0", "")
+                        up = new_dct[scale][chan][process]["up"]
+                        down = new_dct[scale][chan][process]["down"]
+                        line += "{}/{} ".format(up, down)
+                    except KeyError:
+                        try:
+                            p = process.split("_")[-1]
+                            up = new_dct[scale][chan][p]["up"]
+                            down = new_dct[scale][chan][p]["down"]
+                            line += "{}/{} ".format(up, down)
+                        except KeyError:
+                            try:
+                                key = known_conversions[obs][process]
+                                up = new_dct[scale][chan][key]["up"]
+                                down = new_dct[scale][chan][key]["down"]
+                                line += "{}/{} ".format(up, down)
+                            except KeyError:
+                                print("Process {} for bin {} not found in the dictionary".format(process, bin))
+                                line += "- "
+            else:
+                line += "- "
+        # replace 0.0/0.0 with 1.0/1.0
+        line = line.replace("0.0/0.0", "1.0/1.0")
+        new_acc_lines.append(line + "\n")
+    
+    new_lines = []
+    # add it in the line after the line ---- which comes after the rate line
+    for line in lines:
+        new_lines.append(line)
+        if line.startswith("----"):
+            if new_lines[-2].startswith("rate"):
+                for acc_line in new_acc_lines:
+                    new_lines.append(acc_line)
+    
+    with open(card, "w") as f:
+        f.writelines(new_lines)
+
+
 class CombineCards(BaseNotifierClass):
     channels = luigi.ListParameter()
     output_card_name = luigi.Parameter()
     extra_options = luigi.OptionalParameter(default="")
     replace_mass = luigi.BoolParameter(default=False)
+    add_acceptance_unc = luigi.BoolParameter(default=False)
+    observable = luigi.OptionalParameter(default="smH_PTH")
 
     def make_commands(self):
         self.commands = [
@@ -189,6 +336,9 @@ nuisance edit rename * hgg.* CMS_res_j_17 CMS_res_j_2017 ifexists
             replace_mass_in_card(self.output_card_name)
 
         change_ooa_number_in_card(self.output_card_name)
+
+        if self.add_acceptance_unc:
+            add_acceptance_unc_to_card(self.output_card_name, self.observable)
         
         self.send_notification_complete()
 
